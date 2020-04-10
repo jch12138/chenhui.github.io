@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-10T07:35:39.812Z</updated>
+    <updated>2020-04-10T08:08:29.431Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -10,6 +10,29 @@
     <logo>https://baldstudio.cn/images/avatar.png</logo>
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 博德工作室</rights>
+    <entry>
+        <title type="html"><![CDATA[成功为RT-Thread主线贡献代码😁]]></title>
+        <id>https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/</id>
+        <link href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
+        </link>
+        <updated>2020-04-10T08:01:02.000Z</updated>
+        <content type="html"><![CDATA[<p>RT-Thread的FinSH组件提供了适用于嵌入式的类Unix终端,非常好用,但一直以来缺少类似其他平台下的clear命令.无法清空当前屏幕.于是提交了一个PR,为FinSH组件增加clear命令</p>
+<h2 id="新增代码">新增代码</h2>
+<pre><code class="language-c">long clear(void)
+{
+    rt_kprintf(&quot;\x1b[2J\x1b[H&quot;);
+
+    return 0;
+}
+FINSH_FUNCTION_EXPORT(clear,clear the terminal screen);
+MSH_CMD_EXPORT(clear,clear the terminal screen);
+</code></pre>
+<p>##使用效果<br>
+<img src="https://baldstudio.cn/post-images/1586505983582.gif" alt="" loading="lazy"></p>
+<p>##总结<br>
+总共提了3次PR才过,失败的原因有英文不过关,无法用英文准确表述自己意图,最后使用中文才通过,提交PR时要尽量表述清楚,格式规范,奥利给!</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://baldstudio.cn/post/hello-gridea/</id>
