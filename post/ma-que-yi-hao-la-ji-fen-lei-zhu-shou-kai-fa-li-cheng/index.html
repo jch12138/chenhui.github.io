@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>[麻雀一号]垃圾分类助手开发历程 | 博德工作室</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1586790483578">
+<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://baldstudio.cn">
+        <img src="https://baldstudio.cn/images/avatar.png?v=1586790483578" class="site-logo">
+        <h1 class="site-title">博德工作室</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      Keep Foolish, Keep Hungry
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a> | <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">[麻雀一号]垃圾分类助手开发历程</h2>
+            <div class="post-date">2020-04-13</div>
+            
+            <div class="post-content" v-pre>
+              <p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
+我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
+<img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
+<blockquote>
+<p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片，<br>
+内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
+</blockquote>
+<p>官方提供的sdk是基于RT-Thread v3.0.1的,版本有点老,略微有点让人有点不爽,想自己适配最新版,可是报了好多错,还是先老老实实用官方的吧😂.<br>
+<img src="https://baldstudio.cn/post-images/1586790191438.png" alt="" loading="lazy"><br>
+体验了一下子之后,发现官方sdk的功能已经很完善了,基本把这块板上所有资源都用到了.但是依然有点遗憾,官方的menuconfig没有适配好.早期适配了一下之后,就都在直接改&lt;rtconfig.h&gt;.导致一旦使用menuconfig后,会缺少大量宏定义导致编译失败.</p>
+<h2 id="开发进度">开发进度</h2>
+<ul>
+<li>开机自动连接wifi</li>
+<li>图片转base64</li>
+<li>实现GET请求</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
+                  <h3 class="post-title">
+                    成功为RT-Thread主线贡献代码😁
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
