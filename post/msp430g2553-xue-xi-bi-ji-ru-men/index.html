@@ -1,0 +1,494 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MSP430G2553学习笔记：入门😁 | 博德工作室</title>
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1586855213600">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="MSP430G2553学习笔记：入门😁 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。
+主要部件
+
+
+MSP430G2553 开发板
+
+
+LCD1602显示器
+
+
+
+线路连接
+
+
+查看LCD1602的使用手册的接口说明
+
+
+
+..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://baldstudio.cn">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1586855213600" alt="">
+  </a>
+  <h1 class="site-title">
+    博德工作室
+  </h1>
+  <p class="site-description">
+    Keep Foolish, Keep Hungry
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MSP430G2553学习笔记：入门😁
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-14
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://baldstudio.cn/post-images/msp430g2553-xue-xi-bi-ji-ru-men.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。</p>
+<h3 id="主要部件">主要部件</h3>
+<ul>
+<li>
+<p>MSP430G2553 开发板</p>
+</li>
+<li>
+<p>LCD1602显示器</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://baldstudio.cn/post-images/1586854858163.jpg" alt="" loading="lazy"></figure>
+<h3 id="线路连接">线路连接</h3>
+<ul>
+<li>
+<h4 id="查看lcd1602的使用手册的接口说明">查看LCD1602的使用手册的接口说明</h4>
+</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://baldstudio.cn/post-images/1586854867204.jpg" alt="" loading="lazy"></figure>
+<ul>
+<li>
+<h4 id="具体接线">具体接线</h4>
+<ul>
+<li>该接电源的接电源，该接地的接地</li>
+<li>D0~D7  ==&gt;  P2.0~P2.7</li>
+<li>VL  ===&gt;  滑动变阻器  ===&gt;  接地</li>
+<li>RS  ===&gt;  P1.7</li>
+<li>R/W  ==&gt;  P1.6 ，并且将开发板上的P1.6LED的跳线帽拔掉</li>
+<li>E  ==&gt;  P1.5</li>
+</ul>
+</li>
+<li>
+<h4 id="实物图">实物图</h4>
+<p>​	只要接的对，疯狂走线也没有问题😂。由于MSP430工作电压为3.3V，LCD1602的工作电压为5V，这里用了USB转TTL模块给LCD供电。MSP430用USB线供电。❀两开花❀</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="3"><img src="https://baldstudio.cn/post-images/1586854881991.jpg" alt="" loading="lazy"></figure>
+<h3 id="点亮lcd显示内容">点亮LCD：显示内容</h3>
+<p>在LCD上显示东西需要分两个步骤，一个是发送指令（Command），另一个是发送数据（Data）。</p>
+<p>指令用于确定显示位置和LCD显示设置。数据就是显示的内容。</p>
+<p>第一行显示的位置从0x00开始，第二行从0x40开始，每行16个，多的不显示。</p>
+<p><strong>需要注意的是选择显示的位置时，需要额外加上0x80，具体原因和其驱动器有关，这里不深究</strong>。</p>
+<p><strong>写指令/数据</strong>代码如下：</p>
+<pre><code class="language-c">//**********************************
+//       LCD写指令函数
+//**********************************
+void LCD_writeCmd(unsigned char command)
+{
+  RS &amp;= ~BIT7;         //设置为指令
+  RW &amp;= ~BIT6;         //设置为写操作
+  delay_ms(1);
+  EN |= BIT5;          //使能端设为高
+  P2OUT = command;     //发送指令
+  delay_ms(1);
+  EN &amp;= ~BIT5;         //关闭使能端
+}
+
+//**********************************
+//        LCD写数据函数
+//**********************************
+void LCD_writeData(unsigned char data)
+{
+  RS |= BIT7;            //设置为数据
+  RW &amp;= ~BIT6;           //设置为写操作
+  delay_ms(1); 
+  EN |= BIT5;            //使能端设为高
+  P2OUT = data;          //发送数据
+  delay_ms(1);
+  EN &amp;= ~BIT5;           //关闭使能端
+}
+</code></pre>
+<p>当然，在使用之前，还要对显示的模式进行设置。</p>
+<pre><code class="language-c">//**********************************
+//        LCD初始化函数
+//**********************************
+void LCD_init(void)
+{
+  RW &amp;= ~BIT6;
+  LCD_writeCmd(0x38);  //设置为八线模式，两行显示
+  LCD_writeCmd(0x0C);  //00001+(1:开显示；0：关显示)+（1：显示光标；0：不显示光标)+(1:光标闪烁；						  0：不闪烁)
+  LCD_writeCmd(0x06);  //000001+(1:光标自动加一；0：光标自动减一)+（1：整屏移动，方向取决于前一							位；0：不移动）
+  LCD_writeCmd(0x01);  //数据指针清零，显示清零
+  					   //0x02 数据指针清零
+}
+</code></pre>
+<h3 id="定时器计时">定时器：计时</h3>
+<p>刚刚入门，还需学习🤦‍，详见 <a href="https://www.ti.com/lit/ug/slau144j/slau144j.pdf">MSP430x2xx Family User's Guide</a> 里的Timer_A。</p>
+<p>下面是在SMCLK频率1MHz下，经过10ms触发中断的Timer_A初始化函数。</p>
+<pre><code class="language-c">//**********************************
+//     TimerA初始化函数
+//**********************************
+void TIMERA_init()                       
+{
+  TACTL |= TASSEL_2;  //SMCLK做时钟源
+  TACTL |= ID_0;      //不分频
+  TACTL |= MC_1;      //增计数模式
+  TACTL |= TACLR;     //计数器清零
+  TACCR0 = 9999;
+  TACCTL0 |= CCIE;    //允许TACCR0中断
+}
+</code></pre>
+<h3 id="最终结果">最终结果</h3>
+<p>基于上面的基本知识、用法与函数，最后制作了一个***LCD显示计时器***，后期还会学习新的知识来增加功能。目前的效果如下。<br>
+<video src="../../images/zui-zhong.mp4"  controls='0' height=auto width=100%> </video></p>
+<h3 id="完整代码">完整代码</h3>
+<pre><code class="language-c">  #include &lt;msp430.h&gt;
+#include &lt;msp430G2553.h&gt;
+  
+  #define RS P1OUT  //RS --&gt; P1.7
+  #define RW P1OUT  //RW --&gt; P1.6
+  #define EN P1OUT  //EN --&gt; P1.5
+  #define DATA_PORT P2OUT  //数据、指令 --&gt; P2.0~P2.7
+  #define COMMAND_PORT P2OUT
+  
+  ////预定义函数
+  void LCD_init(void); 
+  void LCD_writeCmd(unsigned char command);
+  void LCD_writeData(unsigned char data);
+  void TIMERA_init(void);
+  void delay_ms(int t);
+  
+  char  BALD[]=&quot;BalD STUDIO&quot;;
+  char  TimeNum[]= &quot;00:00:00&quot;;
+  unsigned int count;
+  
+  //**********************************
+  //      P1中断函数
+  //**********************************
+  #pragma vector = PORT1_VECTOR
+  __interrupt void port1(void)
+  {
+    delay_ms(2);
+    if((P1IN &amp; BIT3)==0){
+      unsigned int i;
+      for(i=0; i&lt;8; i++)
+      {
+        if(i==2 || i==5)TimeNum[i]= 0x3A;
+        else TimeNum[i]=0x30;
+      }
+    }
+    P1IFG &amp;= ~BIT3;
+  }
+  
+  //**********************************
+  //      TimerA0中断函数
+  //**********************************
+  #pragma vector = TIMER0_A0_VECTOR   //TACCR0的中断向量
+  __interrupt void Timer0_A0(void)
+  {
+    if(count == 100)
+    {
+      TimeNum[7] += 0x01;  //秒+1
+      unsigned int i;
+      for(i=0; i&lt;8; i++)   //进位的处理
+      {
+        switch(i)
+        {
+        case 0: case 1: case 4: case 7:if(TimeNum[i] == 0x3A){TimeNum[i-1] += 				0x01;TimeNum[i] = 0x30;}
+        case 3: if(TimeNum[3] == 0x36){TimeNum[1] += 0x01;TimeNum[3] = 0x30;}
+        case 6: if(TimeNum[6] == 0x36){TimeNum[4] += 0x01;TimeNum[6] = 0x30;}
+        case 2: case 5: break;
+        }
+      }
+      count = 0;
+    }
+    else
+    {
+      count++;
+    }
+    TACCTL0 &amp;= ~CCIFG;
+  }
+  
+  //**********************************
+  //      Main函数
+  //**********************************
+  void main(void)
+  {
+    WDTCTL = WDTPW + WDTHOLD; //关闭看门狗
+    BCSCTL1 = CALBC1_1MHZ;
+    DCOCTL = CALDCO_1MHZ;
+    BCSCTL2 = SELM_1 + DIVM_1;
+    
+    P1SEL = 0x00;    //设置P1口为I/O模式
+    P2SEL = 0x00;    //设置P2口为I/O模式
+    P1DIR |= 0xFF;   //设置P1口为输出模式
+    P2DIR |= 0xFF;   //设置P2口为输出模式
+    P1OUT &amp;= 0x00;                  
+    P2OUT &amp;= 0x00;
+    
+    P1DIR &amp;= ~BIT3;  //设置P1.3为输入
+    P1REN |= BIT3;   //设置P1.3上拉电阻
+    P1OUT |= BIT3;
+    P1IES |= BIT3;   //设置下边缘触发
+    P1IE |= BIT3;    //允许中断使能
+    P1IFG &amp;= ~BIT3;  //关闭中断标志
+    
+    P1DIR |= BIT0;
+    
+    _EINT();   //开总中断
+    
+    TIMERA_init();
+    LCD_init();
+    
+    while(1)
+    { 
+      P1OUT &amp;= ~BIT0;
+      unsigned int i;
+      //显示第一行
+      LCD_writeCmd(0x80);
+      i = 0;
+      while(BALD[i] != '\0'){
+        LCD_writeData(BALD[i]);
+        i++;
+      }
+      //显示第二行
+      LCD_writeCmd(0x80 + 0x40);
+      i = 0;
+      while(TimeNum[i] != '\0'){
+        LCD_writeData(TimeNum[i]);
+        i++;
+      }
+    }
+  }
+  
+  //**********************************
+  //     TimerA初始化函数
+  //**********************************
+  void TIMERA_init()                       
+  {
+    TACTL |= TASSEL_2;  //SMCLK做时钟源
+    TACTL |= ID_0;      //不分频
+    TACTL |= MC_1;      //增计数模式
+    TACTL |= TACLR;     //计数器清零
+    TACCR0 = 9999;
+    TACCTL0 |= CCIE;    //允许TACCR0中断
+  }
+  
+  //**********************************
+  //       LCD写指令函数
+  //**********************************
+  void LCD_writeCmd(unsigned char command)
+  {
+    RS &amp;= ~BIT7;
+    RW &amp;= ~BIT6;
+    delay_ms(1);
+    EN |= BIT5;
+    P2OUT = command;
+    delay_ms(1);
+    EN &amp;= ~BIT5;
+  }
+  
+  //**********************************
+  //        LCD写数据函数
+  //**********************************
+  void LCD_writeData(unsigned char data)
+  {
+    RS |= BIT7;
+    RW &amp;= ~BIT6;
+    delay_ms(1);
+    EN |= BIT5;
+    P2OUT = data;
+    delay_ms(1);
+    EN &amp;= ~BIT5;
+  }
+  
+  //**********************************
+  //        LCD初始化函数
+  //**********************************
+  void LCD_init(void)
+  {
+    RW &amp;= ~BIT6;
+    LCD_writeCmd(0x38);  //设置为八线模式，两行显示
+    LCD_writeCmd(0x0C);  //00001+(1:开显示；0：关显示)+（1：显示光标；0：不显示光标)+(1:光标闪烁；0：不闪烁)
+    LCD_writeCmd(0x06);  //指针自动增加一位
+    LCD_writeCmd(0x01);  //清屏
+  }
+  
+  //**********************************
+  //      延时函数
+  //**********************************
+  void delay_ms(int t)
+  {
+    unsigned int i;
+    for(i=0; i&lt;t; i++)
+    {
+      __delay_cycles(1000);
+    }
+  }
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E4%B8%BB%E8%A6%81%E9%83%A8%E4%BB%B6">主要部件</a></li>
+<li><a href="#%E7%BA%BF%E8%B7%AF%E8%BF%9E%E6%8E%A5">线路连接</a>
+<ul>
+<li><a href="#%E6%9F%A5%E7%9C%8Blcd1602%E7%9A%84%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E">查看LCD1602的使用手册的接口说明</a></li>
+<li><a href="#%E5%85%B7%E4%BD%93%E6%8E%A5%E7%BA%BF">具体接线</a></li>
+<li><a href="#%E5%AE%9E%E7%89%A9%E5%9B%BE">实物图</a></li>
+</ul>
+</li>
+<li><a href="#%E7%82%B9%E4%BA%AElcd%E6%98%BE%E7%A4%BA%E5%86%85%E5%AE%B9">点亮LCD：显示内容</a></li>
+<li><a href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E8%AE%A1%E6%97%B6">定时器：计时</a></li>
+<li><a href="#%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C">最终结果</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81">完整代码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
+              <h3 class="post-title">
+                [麻雀一号]垃圾分类助手开发历程
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
