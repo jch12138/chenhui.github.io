@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-14T01:50:51.692Z</updated>
+    <updated>2020-04-14T02:46:42.010Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -16,22 +16,128 @@
         <link href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
         </link>
         <updated>2020-04-13T14:49:14.000Z</updated>
-        <content type="html"><![CDATA[<p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
+        <content type="html"><![CDATA[<h2 id="简单介绍">简单介绍</h2>
+<p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
 我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
 <img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
 <blockquote>
-<p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片，<br>
-内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
+<p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片,内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
 </blockquote>
 <p>官方提供的sdk是基于RT-Thread v3.0.1的,版本有点老,略微有点让人有点不爽,想自己适配最新版,可是报了好多错,还是先老老实实用官方的吧😂.<br>
 <img src="https://baldstudio.cn/post-images/1586790191438.png" alt="" loading="lazy"><br>
 体验了一下子之后,发现官方sdk的功能已经很完善了,基本把这块板上所有资源都用到了.但是依然有点遗憾,官方的menuconfig没有适配好.早期适配了一下之后,就都在直接改&lt;rtconfig.h&gt;.导致一旦使用menuconfig后,会缺少大量宏定义导致编译失败.</p>
+<h2 id="如何使用">如何使用</h2>
+<p>我原来使用了很久的STM32,熟悉了使用jlink下载的方式,拿到这块板,突然发现不能使用jlink,只能用串口下载的方式,有点懵逼😵.以前接触过串口下载,唯一的感觉就是慢,还不能打断点调试.<br>
+官方的手册里介绍了两种方式下载固件.</p>
+<ul>
+<li>无线烧录器烧录<br>
+随开发板附赠了一个无线烧录器,无线烧录器本身运行在AP热点模式.将无线烧录器插在开发板上,连接烧录器发出的wifi,打开烧录器的烧录页面,上传固件更新.这种方式很麻烦,下载一次固件需要2分钟左右.</li>
+<li>http_ota更新<br>
+当开发板连接上wifi后,可以使用ota更新,自己的电脑上运行一个web服务器,把更新固件放在服务器工作目录里,开发板先把文件下载到download分区,重启后进入bootloader,把download分区中的固件写入app分区里.之后重启,这种方式还可以接受.大概一分钟左右.有几个要注意的点</li>
+</ul>
+<ol>
+<li>不能直接用rtthread.bin升级,首先要使用ota打包工具打包成bootloader可以使用的包.</li>
+<li>打包的选项要和图中一致.我之前因为没有使用压缩,导致包太大,无法下载到开发板中,没有使用加密,开发板不接受没有加密过的包.版本号一定要比开发板中运行的固件版本号高,不然无法更新.<br>
+<img src="https://baldstudio.cn/post-images/1586832193569.png" alt="" loading="lazy"></li>
+</ol>
 <h2 id="开发进度">开发进度</h2>
 <ul>
-<li>开机自动连接wifi</li>
-<li>图片转base64</li>
-<li>实现GET请求</li>
+<li>开机自动连接wifi<br>
+官方提供了wifi的MSH命令,使用方式是&quot;wifi w0 join ssid key&quot;,通过阅读rtthread/comptents/wlan/wlan_cmd.c中的源码,将连接wifi的代码放到了主函数中,实现上电即可连接wifi.</li>
 </ul>
+<pre><code class="language-c">void wlan_connect(){
+
+    #define wifi_ssid &quot;TP-LINK_1&quot;
+    #define wifi_key &quot;jia555555&quot;
+
+    rt_kprintf(&quot;wifi连接中...\r\n&quot;);
+    struct rt_wlan_info info;
+    int result = 0;
+
+    struct rt_wlan_device *wlan = (struct rt_wlan_device*)rt_device_find(&quot;w0&quot;);
+
+    if(wlan == RT_NULL){
+        rt_kprintf(&quot;设备未找到!\r\n&quot;);
+    }
+
+    rt_wlan_info_init(&amp;info, WIFI_STATION, SECURITY_WPA2_MIXED_PSK, wifi_ssid);
+
+    result = rt_wlan_init(wlan, WIFI_STATION);
+
+    if (result == RT_EOK)
+    {
+        result = rt_wlan_connect(wlan, &amp;info, wifi_key);
+        if(result == RT_EOK)
+        {
+            rt_kprintf(&quot;wifi已连接!\r\n&quot;);
+        }
+        else
+        {
+            rt_kprintf(&quot;wifi连接失败!\r\n&quot;);
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>图片转base64<br>
+本来准备自己实现,后来发现rtt有一个package,叫做tinycrtpt,为嵌入式设备提供了常用的加密方式的加解密.其中就包括了base64.在rtconfig.h中添加宏定义开启tinycrypt后,在主函数中引入头文件&quot;tinycrypt.h&quot;即可使用相关函数.<br>
+一张320x240的照片大小是22k左右,于是先要有一个数组缓存照片内容,使用rt_malloc获取24k的unsigned char 数组空间.base64转码完大约需要33k的空间,同样也要使用rt_malloc来获取.我写了一个demo,暂时先将base64结果存入sd卡中.整个转码过程很快,几乎感觉不到耗时.前几次由于接收数组的空间太小,导致程序卡死,仔细研究源码后,确定了合适的数组大小.程序顺利运行.</li>
+</ul>
+<pre><code class="language-c">unsigned char *photo2base64(void)
+{
+    int fd = open(&quot;/sd/temp.jpg&quot;,O_RDONLY);
+    unsigned char *img = RT_NULL;
+    unsigned char *dst = RT_NULL;
+    img = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*24);
+    dst = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*50);
+    if(img==RT_NULL || dst==RT_NULL)
+    {
+        rt_kprintf(&quot;内存分配失败\r\n&quot;);
+    }
+    int res = read(fd, img, 1024*24);
+    close(fd);
+    rt_kprintf(&quot;res=%d\r\n&quot;,res);
+    int len = 1024*40;
+    tiny_base64_encode(dst,&amp;len,img,1024*24);
+    rt_kprintf(&quot;len=%d\r\n&quot;,len);
+    fd = open(&quot;/sd/base64.txt&quot;,O_WRONLY|O_CREAT);
+    res = write(fd,dst,len);
+    rt_kprintf(&quot;res = %d\r\n&quot;,res);
+    close(fd);
+    rt_kprintf(dst);
+    rt_free(img);
+    rt_free(dst);
+
+}
+</code></pre>
+<ul>
+<li>实现GET请求<br>
+使用webclient可以实现get请求,可以在终端打印出结果,由于在嵌入式中进行网络请求依然比较麻烦,所以我决定在自己的服务器上对两个api做二次封装.只要开发板网服务器发送图片数据,服务器会先调用垃圾分类api获取分类信息,然后调用语音合成api,生成语音文件,返回给开发板.这样开发板只需做一次请求,简化了开发板端的工作量.</li>
+</ul>
+<pre><code class="language-c">int get_garbage_info(void)
+{
+    #define HTTP_GET_URL &quot;http://api.tianapi.com/txapi/imglajifenlei/index&quot;
+    #define HEADER &quot;Content-Type: application/x-www-form-urlencoded&quot;
+    char *payload = &quot;key=acda67d9ac820ea200a26f73d0b41adf&quot;;
+    unsigned char *buffer = RT_NULL;
+
+    int length = 0;
+
+    length = webclient_request(HTTP_GET_URL, HEADER, payload, &amp;buffer);
+
+    if (length &lt; 0)
+    {
+        rt_kprintf(&quot;webclient GET request response data error.\r\n&quot;);
+        return -RT_ERROR;
+    }
+
+    rt_kprintf(&quot;webclient GET request response data :\r\n&quot;);
+    rt_kprintf(&quot;%s\r\n&quot;,buffer);
+
+    web_free(buffer);
+    return RT_EOK;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
