@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[麻雀一号]垃圾分类助手开发历程 | 博德工作室</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1586855213600">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1586952985825">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="[麻雀一号]垃圾分类助手开发历程 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1586855213600" alt="">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1586952985825" alt="">
   </a>
   <h1 class="site-title">
     博德工作室
@@ -82,7 +82,7 @@
                 2020-04-13
               </span>
               <span>
-                7 min read
+                8 min read
               </span>
               
             </div>
@@ -156,15 +156,15 @@
 <ul>
 <li>图片转base64<br>
 本来准备自己实现,后来发现rtt有一个package,叫做tinycrtpt,为嵌入式设备提供了常用的加密方式的加解密.其中就包括了base64.在rtconfig.h中添加宏定义开启tinycrypt后,在主函数中引入头文件&quot;tinycrypt.h&quot;即可使用相关函数.<br>
-一张320x240的照片大小是22k左右,于是先要有一个数组缓存照片内容,使用rt_malloc获取24k的unsigned char 数组空间.base64转码完大约需要33k的空间,同样也要使用rt_malloc来获取.我写了一个demo,暂时先将base64结果存入sd卡中.整个转码过程很快,几乎感觉不到耗时.前几次由于接收数组的空间太小,导致程序卡死,仔细研究源码后,确定了合适的数组大小.程序顺利运行.</li>
+一张320x240的照片大小是22k左右,于是先要有一个数组缓存照片内容,使用rt_malloc获取24k的unsigned char 数组空间.base64转码完大约需要33k的空间,同样也要使用rt_malloc来获取.我写了一个demo,暂时先将base64结果存入sd卡中.整个转码过程很快,几乎感觉不到耗时.前几次由于接收数组的空间太小,导致程序卡死,仔细研究源码后,确定了合适的数组大小.程序顺利运行.<br>
+在进行优化之后,从sd卡中读取图片之后,无需在写入SD卡,而是将结果赋给指针,返回给调用的函数.<br>
+更加节省资源,减少时间开销.</li>
 </ul>
-<pre><code class="language-c">unsigned char *photo2base64(void)
+<pre><code class="language-c">int photo2base64(const char * path,unsigned char * dst)
 {
-    int fd = open(&quot;/sd/temp.jpg&quot;,O_RDONLY);
+    int fd = open(path,O_RDONLY);
     unsigned char *img = RT_NULL;
-    unsigned char *dst = RT_NULL;
     img = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*24);
-    dst = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*50);
     if(img==RT_NULL || dst==RT_NULL)
     {
         rt_kprintf(&quot;内存分配失败\r\n&quot;);
@@ -175,44 +175,47 @@
     int len = 1024*40;
     tiny_base64_encode(dst,&amp;len,img,1024*24);
     rt_kprintf(&quot;len=%d\r\n&quot;,len);
-    fd = open(&quot;/sd/base64.txt&quot;,O_WRONLY|O_CREAT);
-    res = write(fd,dst,len);
-    rt_kprintf(&quot;res = %d\r\n&quot;,res);
-    close(fd);
-    rt_kprintf(dst);
     rt_free(img);
-    rt_free(dst);
-
+    return len;
 }
 </code></pre>
 <ul>
 <li>实现GET请求<br>
-使用webclient可以实现get请求,可以在终端打印出结果,由于在嵌入式中进行网络请求依然比较麻烦,所以我决定在自己的服务器上对两个api做二次封装.只要开发板网服务器发送图片数据,服务器会先调用垃圾分类api获取分类信息,然后调用语音合成api,生成语音文件,返回给开发板.这样开发板只需做一次请求,简化了开发板端的工作量.</li>
+使用webclient可以实现get请求,可以在终端打印出结果,我在PC上用Python调式的时候,用了几分钟就调通了api接口.可是当我在开发板上进行调用的时候,频频出现问题.因为Python的库封装的太好了,以至于很多细节都是我以前没有考虑过得.踩了很多坑.才把api调通.<br>
+我主要的问题是出现在POST请求时的参数格式不对.我一直以为应该是Urlencode(数据头+Base64(图片)),但后来用Fiddler抓包的时候,仔细分析,发现应该是数据头+Urlencode(Base64(图片)),把参数的格式调整正确之后,总算是调通了api</li>
 </ul>
-<pre><code class="language-c">int get_garbage_info(void)
+<pre><code class="language-c">int base64_test(int argc, char **argv)
 {
-    #define HTTP_GET_URL &quot;http://api.tianapi.com/txapi/imglajifenlei/index&quot;
-    #define HEADER &quot;Content-Type: application/x-www-form-urlencoded&quot;
-    char *payload = &quot;key=acda67d9ac820ea200a26f73d0b41adf&quot;;
-    unsigned char *buffer = RT_NULL;
-
-    int length = 0;
-
-    length = webclient_request(HTTP_GET_URL, HEADER, payload, &amp;buffer);
-
-    if (length &lt; 0)
+    char *uri = RT_NULL;
+    uri = web_strdup(&quot;http://api.tianapi.com/txapi/imglajifenlei/index&quot;);
+    if(uri == RT_NULL)
     {
-        rt_kprintf(&quot;webclient GET request response data error.\r\n&quot;);
-        return -RT_ERROR;
+        rt_kprintf(&quot;no memory for create post request uri buffer.\n&quot;);
+        return -RT_ENOMEM;
     }
 
-    rt_kprintf(&quot;webclient GET request response data :\r\n&quot;);
-    rt_kprintf(&quot;%s\r\n&quot;,buffer);
+    unsigned char *dst = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*40);
+    photo2base64(argv[1],dst);
 
-    web_free(buffer);
-    return RT_EOK;
+    unsigned char *buffer = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*40);
+    rt_sprintf(buffer,&quot;img=data:image/jpg;base64,%s&quot;,dst);
+    memset(dst,0,rt_strlen(dst));   
+    URLEncode(buffer, rt_strlen(buffer), dst, 1024*40);
+    memset(buffer,0,rt_strlen(buffer));    
+    rt_sprintf(buffer,&quot;key=acda67d9ac820ea200a26f73d0b41adf&amp;img=%s&quot;,dst);
+    webclient_post_comm(uri, buffer);
+    
+    web_free(uri);
+    rt_free(dst);
+    rt_free(buffer);
 }
 </code></pre>
+<ul>
+<li>实现流式音频传输<br>
+本来是准备使用RESTFul API的,把完整的音频下载下来在播放,但是考虑到图像识别已经花了很多时间了,再等他把音频下完,工作周期就太长了,影响用户体验,所以还是决定上实时播放的流式音频传输,这个比较难实现,因为这个部分涉及到的知识我都不太了解,它涉及WebSocket,音频的格式,解码,播放.需要好好学习</li>
+<li>按下按键拍照,并把照片存储到sd卡<br>
+这个实现难度较小,可以参考官方的例子进行简单改动即可.</li>
+</ul>
 
               </div>
               <div class="toc-container">
