@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-17T13:29:14.722Z</updated>
+    <updated>2020-04-17T13:30:39.280Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -304,6 +304,216 @@ void TIMERA_init()
     }
   }
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[[麻雀一号]垃圾分类助手开发历程]]></title>
+        <id>https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/</id>
+        <link href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
+        </link>
+        <updated>2020-04-13T14:49:14.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="简单介绍">简单介绍</h2>
+<p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
+我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
+<img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
+<blockquote>
+<p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片,内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
+</blockquote>
+<p>官方提供的sdk是基于RT-Thread v3.0.1的,版本有点老,略微有点让人有点不爽,想自己适配最新版,可是报了好多错,还是先老老实实用官方的吧😂.<br>
+<img src="https://baldstudio.cn/post-images/1586790191438.png" alt="" loading="lazy"><br>
+体验了一下子之后,发现官方sdk的功能已经很完善了,基本把这块板上所有资源都用到了.但是依然有点遗憾,官方的menuconfig没有适配好.早期适配了一下之后,就都在直接改&lt;rtconfig.h&gt;.导致一旦使用menuconfig后,会缺少大量宏定义导致编译失败.</p>
+<h2 id="如何使用">如何使用</h2>
+<p>我原来使用了很久的STM32,熟悉了使用jlink下载的方式,拿到这块板,突然发现不能使用jlink,只能用串口下载的方式,有点懵逼😵.以前接触过串口下载,唯一的感觉就是慢,还不能打断点调试.<br>
+官方的手册里介绍了两种方式下载固件.</p>
+<ul>
+<li>无线烧录器烧录<br>
+随开发板附赠了一个无线烧录器,无线烧录器本身运行在AP热点模式.将无线烧录器插在开发板上,连接烧录器发出的wifi,打开烧录器的烧录页面,上传固件更新.这种方式很麻烦,下载一次固件需要2分钟左右.</li>
+<li>http_ota更新<br>
+当开发板连接上wifi后,可以使用ota更新,自己的电脑上运行一个web服务器,把更新固件放在服务器工作目录里,开发板先把文件下载到download分区,重启后进入bootloader,把download分区中的固件写入app分区里.之后重启,这种方式还可以接受.大概一分钟左右.有几个要注意的点</li>
+</ul>
+<ol>
+<li>不能直接用rtthread.bin升级,首先要使用ota打包工具打包成bootloader可以使用的包.</li>
+<li>打包的选项要和图中一致.我之前因为没有使用压缩,导致包太大,无法下载到开发板中,没有使用加密,开发板不接受没有加密过的包.版本号一定要比开发板中运行的固件版本号高,不然无法更新.<br>
+<img src="https://baldstudio.cn/post-images/1586832193569.png" alt="" loading="lazy"></li>
+</ol>
+<h2 id="开发进度">开发进度</h2>
+<ul>
+<li>开机自动连接wifi<br>
+官方提供了wifi的MSH命令,使用方式是&quot;wifi w0 join ssid key&quot;,通过阅读rtthread/comptents/wlan/wlan_cmd.c中的源码,将连接wifi的代码放到了主函数中,实现上电即可连接wifi.</li>
+</ul>
+<pre><code class="language-c">void wlan_connect(){
+
+    #define wifi_ssid &quot;TP-LINK_1&quot;
+    #define wifi_key &quot;jia555555&quot;
+
+    rt_kprintf(&quot;wifi连接中...\r\n&quot;);
+    struct rt_wlan_info info;
+    int result = 0;
+
+    struct rt_wlan_device *wlan = (struct rt_wlan_device*)rt_device_find(&quot;w0&quot;);
+
+    if(wlan == RT_NULL){
+        rt_kprintf(&quot;设备未找到!\r\n&quot;);
+    }
+
+    rt_wlan_info_init(&amp;info, WIFI_STATION, SECURITY_WPA2_MIXED_PSK, wifi_ssid);
+
+    result = rt_wlan_init(wlan, WIFI_STATION);
+
+    if (result == RT_EOK)
+    {
+        result = rt_wlan_connect(wlan, &amp;info, wifi_key);
+        if(result == RT_EOK)
+        {
+            rt_kprintf(&quot;wifi已连接!\r\n&quot;);
+        }
+        else
+        {
+            rt_kprintf(&quot;wifi连接失败!\r\n&quot;);
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>图片转base64<br>
+本来准备自己实现,后来发现rtt有一个package,叫做tinycrtpt,为嵌入式设备提供了常用的加密方式的加解密.其中就包括了base64.在rtconfig.h中添加宏定义开启tinycrypt后,在主函数中引入头文件&quot;tinycrypt.h&quot;即可使用相关函数.<br>
+一张320x240的照片大小是22k左右,于是先要有一个数组缓存照片内容,使用rt_malloc获取24k的unsigned char 数组空间.base64转码完大约需要33k的空间,同样也要使用rt_malloc来获取.我写了一个demo,暂时先将base64结果存入sd卡中.整个转码过程很快,几乎感觉不到耗时.前几次由于接收数组的空间太小,导致程序卡死,仔细研究源码后,确定了合适的数组大小.程序顺利运行.<br>
+在进行优化之后,从sd卡中读取图片之后,无需在写入SD卡,而是将结果赋给指针,返回给调用的函数.<br>
+更加节省资源,减少时间开销.</li>
+</ul>
+<pre><code class="language-c">int photo2base64(const char * path,unsigned char * dst)
+{
+    int fd = open(path,O_RDONLY);
+    unsigned char *img = RT_NULL;
+    img = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*24);
+    if(img==RT_NULL || dst==RT_NULL)
+    {
+        rt_kprintf(&quot;内存分配失败\r\n&quot;);
+    }
+    int res = read(fd, img, 1024*24);
+    close(fd);
+    rt_kprintf(&quot;res=%d\r\n&quot;,res);
+    int len = 1024*40;
+    tiny_base64_encode(dst,&amp;len,img,1024*24);
+    rt_kprintf(&quot;len=%d\r\n&quot;,len);
+    rt_free(img);
+    return len;
+}
+</code></pre>
+<ul>
+<li>实现GET请求<br>
+使用webclient可以实现get请求,可以在终端打印出结果,我在PC上用Python调式的时候,用了几分钟就调通了api接口.可是当我在开发板上进行调用的时候,频频出现问题.因为Python的库封装的太好了,以至于很多细节都是我以前没有考虑过得.踩了很多坑.才把api调通.<br>
+我主要的问题是出现在POST请求时的参数格式不对.我一直以为应该是Urlencode(数据头+Base64(图片)),但后来用Fiddler抓包的时候,仔细分析,发现应该是数据头+Urlencode(Base64(图片)),把参数的格式调整正确之后,总算是调通了api</li>
+</ul>
+<pre><code class="language-c">int base64_test(int argc, char **argv)
+{
+    char *uri = RT_NULL;
+    uri = web_strdup(&quot;http://api.tianapi.com/txapi/imglajifenlei/index&quot;);
+    if(uri == RT_NULL)
+    {
+        rt_kprintf(&quot;no memory for create post request uri buffer.\n&quot;);
+        return -RT_ENOMEM;
+    }
+
+    unsigned char *dst = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*40);
+    photo2base64(argv[1],dst);
+
+    unsigned char *buffer = (unsigned char *)rt_malloc(sizeof(unsigned char)*1024*40);
+    rt_sprintf(buffer,&quot;img=data:image/jpg;base64,%s&quot;,dst);
+    memset(dst,0,rt_strlen(dst));   
+    URLEncode(buffer, rt_strlen(buffer), dst, 1024*40);
+    memset(buffer,0,rt_strlen(buffer));    
+    rt_sprintf(buffer,&quot;key=acda67d9ac820ea200a26f73d0b41adf&amp;img=%s&quot;,dst);
+    webclient_post_comm(uri, buffer);
+    
+    web_free(uri);
+    rt_free(dst);
+    rt_free(buffer);
+}
+</code></pre>
+<ul>
+<li>实现语音播报<br>
+使用百度的语音合成API,在比较了几家主要的API厂商后,还是决定用百度的,因为他的API调用方便,鉴权简单.容易在单片机上实现.</li>
+</ul>
+<pre><code class="language-c">int tts_test(int argc, char **argv)
+{
+    unsigned char *url = RT_NULL;
+    unsigned char *text1 = RT_NULL;
+    unsigned char *text2 = RT_NULL;
+    char *origin = &quot;可回收垃圾,不可回收垃圾,垃圾垃圾都是垃圾&quot;;
+    char *token = &quot;24.77fdd5e29e31191ee6c060718b68da99.2592000.1589599990.282335-16279726&quot;;
+
+    text1 = (unsigned char *)rt_malloc(sizeof(unsigned char) * 1024 * 20);
+
+    URLEncode(origin, rt_strlen(origin), text1, 1024 * 20);
+    print_base64(text1, rt_strlen(text1));
+
+    text2 = (unsigned char *)rt_malloc(sizeof(unsigned char) * 1024 * 20);
+    URLEncode(text1, rt_strlen(text1), text2, 1024 * 20);
+    rt_free(text1);
+    print_base64(text2, rt_strlen(text2));
+    url = (unsigned char *)rt_malloc(sizeof(unsigned char) * 1024 * 30);
+    rt_sprintf(url, &quot;http://tsn.baidu.com/text2audio?tok=%s&amp;tex=%s&amp;per=4&amp;spd=5&amp;pit=5&amp;vol=5&amp;aue=3&amp;cuid=123456PYTHON&amp;lan=zh&amp;ctp=1&quot;, token, text2);
+    rt_free(text2);
+    print_base64(url, rt_strlen(url));
+    char *uri = web_strdup(url);
+    webclient_get_file(uri, &quot;/sd/audio.mp3&quot;);
+    web_free(uri);
+    rt_free(url);
+    return 0;
+}
+MSH_CMD_EXPORT(tts_test, tts test);
+</code></pre>
+<ul>
+<li>按下按键拍照,并把照片存储到sd卡<br>
+这个实现难度较小,可以参考官方的例子进行简单改动即可.</li>
+</ul>
+<pre><code class="language-c">int key_photo(int argc, char **argv)
+{
+    session.event = rt_event_create(&quot;vt_event&quot;, RT_IPC_FLAG_FIFO);
+    #define KEY_MID (13)
+    rt_pin_mode(KEY_MID, PIN_MODE_INPUT_PULLUP);
+    while (1)
+    {
+        if (rt_pin_read(KEY_MID) == PIN_LOW)
+        {
+            rt_thread_delay(80);
+            if (rt_pin_read(KEY_MID) == PIN_LOW)
+            {
+                LOG_I(&quot;KEY_MID is pressed&quot;);
+                LOG_I(&quot;正在开启摄像头...&quot;);
+                camera_start(); //开启摄像头传输照片
+                tvideo_capture(1);
+                rt_event_recv(session.event, SEND_FRAME_EVENT, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, RT_NULL);
+
+                int fd, res;
+                rt_sprintf(file_name, &quot;/sd/temp.jpg&quot;, file_count);
+                LOG_I(&quot;name = %s \n&quot;, file_name);
+                fd = open(file_name, O_WRONLY | O_CREAT);
+                if (fd &gt;= 0)
+                {
+                    write(fd, session.buf, session.total_len);
+                    LOG_I(&quot;session.total_len=%d\r\n&quot;, session.total_len);
+                    close(fd);
+                    LOG_I(&quot;save %s ok!!!\n&quot;, file_name);
+                    rt_sem_release(sem_base64);
+                    res = Decode_Jpg(file_name);
+                    LOG_I(&quot;res = %d\n&quot;, res);
+                }
+                else
+                {
+                    LOG_E(&quot;save pic failed!!!\n&quot;);
+                }
+                tvideo_capture(0);
+            }
+        }
+    }
+    return 0;
+}
+MSH_CMD_EXPORT(key_photo, key photo);
+</code></pre>
+<h2 id="联合调试">联合调试</h2>
+<p>在完成各单项功能之后,我开始将这些功能联合起来调试.从1.0.0不断迭代到1.9.1,经历了90多次迭代,六百多行代码,才把这些功能调通.好在最后所有功能都正常.下面是总的系统框图.</p>
 ]]></content>
     </entry>
     <entry>
