@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587130231598">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587377063858">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 
 
@@ -29,7 +29,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://baldstudio.cn">
-        <img src="https://baldstudio.cn/images/avatar.png?v=1587130231598" class="site-logo">
+        <img src="https://baldstudio.cn/images/avatar.png?v=1587377063858" class="site-logo">
         <h1 class="site-title">博德工作室</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -299,7 +299,14 @@ MSH_CMD_EXPORT(tts_test, tts test);
 MSH_CMD_EXPORT(key_photo, key photo);
 </code></pre>
 <h2 id="联合调试">联合调试</h2>
-<p>在完成各单项功能之后,我开始将这些功能联合起来调试.从1.0.0不断迭代到1.9.1,经历了90多次迭代,六百多行代码,才把这些功能调通.好在最后所有功能都正常.下面是总的系统框图.</p>
+<p>在完成各单项功能之后,我开始将这些功能联合起来调试.从1.0.0不断迭代到1.9.1,经历了90多次迭代,六百多行代码,才把这些功能调通.好在最后所有功能都正常.下面是总的系统框图.<br>
+<img src="https://baldstudio.cn/post-images/1587376262709.png" alt="" loading="lazy"></p>
+<h2 id="演示效果">演示效果</h2>
+<p><video src="../../images/VID20200419195427.mp4"  controls='0' height=auto width=100%> </video></p>
+<h2 id="代码地址">代码地址</h2>
+<p><a href="https://github.com/jch12138/Garbage-sorting-assistant">垃圾分类助手</a></p>
+<h2 id="总结">总结</h2>
+<p>通过大约一礼拜的开发,总算是完成了这个项目,如果是在PC上开发,使用高级语言,我想一个下午就能搞定,在嵌入式设备上进行调试费时费力,更加考验你对细节的把握.比如在调用api时,Python里不用关心参数的编码,在c里要自己掌控每个环节.这次使用rtthread,对于内存的使用理解更深了,学会了使用malloc,不再像以前只会使用静态数组了.学会如何节省内存,如何选择内存池.更好的分配内存,提高系统运行效率.</p>
 
             </div>
             
