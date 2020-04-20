@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>[RCEA学习营]第1周 | 博德工作室</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587377497835">
+<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="需要掌握的内容
+第一周主要任务是内核，使用到了RT-Thread simulator压缩包，还没用到ds18b20和esp8266。还没硬件的小伙伴们要赶快啦，后面就要用上了。
+以下整理了第一周学习需要掌握的5项内容，以及相关的学习文档/视..." />
+    <meta name="keywords" content="单片机" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://baldstudio.cn">
+        <img src="https://baldstudio.cn/images/avatar.png?v=1587377497835" class="site-logo">
+        <h1 class="site-title">博德工作室</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      Keep Foolish, Keep Hungry
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a> | <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">[RCEA学习营]第1周</h2>
+            <div class="post-date">2020-04-20</div>
+            
+              <div class="feature-container" style="background-image: url('https://baldstudio.cn/post-images/rcea-xue-xi-ying-di-1-zhou.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="需要掌握的内容">需要掌握的内容</h3>
+<p>第一周主要任务是内核，使用到了RT-Thread simulator压缩包，还没用到ds18b20和esp8266。还没硬件的小伙伴们要赶快啦，后面就要用上了。</p>
+<p>以下整理了第一周学习需要掌握的<strong>5项</strong>内容，以及相关的学习文档/视频链接，内容较多但还算比较基础，推荐大家每天完成一项内容（根据经验，每次学习都会有部分人很积极且效率贼高，所以”每天完成一项“只是做个推荐而不强制，完成的早那就更好了），记得为自己预留做作业的时间。</p>
+<ul>
+<li>1、RT-Thread基础：
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/tutorial/quick-start/introduction/introduction/">RT-Thread简介</a> 、<a href="https://www.rt-thread.org/document/site/">首页简介-版本选择</a>、<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/">内核基础</a></li>
+<li>学习视频：查看群里分享的资料，第一期视频
+<ul>
+<li>《1.RT-Thread简单介绍》</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2、线程
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/programming-manual/thread/thread/">线程管理</a></li>
+<li>学习视频：与线程管理文档配套的视频如下
+<ul>
+<li><a href="https://www.bilibili.com/video/av79513262?p=3">线程创建</a>、</li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=4">线程属性</a>、</li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=5">时间片</a>、</li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=6">空闲线程与钩子函数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>3、timer
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/programming-manual/timer/timer/">时钟管理</a></li>
+<li>学习视频：与时钟管理文档配套的视频如下
+<ul>
+<li><a href="https://www.bilibili.com/video/av79513262?p=15">定时器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>4、IPC
+<ul>
+<li>学习文档：1.<a href="https://www.rt-thread.org/document/site/programming-manual/ipc1/ipc1/">信号量/互斥量/事件集</a>；2.<a href="https://www.rt-thread.org/document/site/programming-manual/ipc2/ipc2/">邮箱/消息队列</a>;</li>
+<li>学习视频：与IPC配套的视频如下
+<ul>
+<li><a href="https://www.bilibili.com/video/av79513262?p=8">信号量</a>、以及<a href="https://www.bilibili.com/video/av79513262?p=9">消费者例程</a></li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=10">互斥量</a>、以及<a href="https://www.bilibili.com/video/av79513262?p=11">解决优先级反转示例</a></li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=12">事件集</a>、</li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=13">邮箱</a>、</li>
+<li><a href="https://www.bilibili.com/video/av79513262?p=14">消息队列</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>5、内存
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/programming-manual/memory/memory/">内存管理</a></li>
+<li>学习视频：<a href="https://www.bilibili.com/video/av79513262?p=16">内存池</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="目标">目标</h3>
+<p>在<strong>掌握以上内容之后</strong>，我们在此基础上<strong>还</strong>需要完成以下几个目标：</p>
+<p>目标1：了解RT-Thread启动流程。</p>
+<p>目标2：了解RT-Thread自动初始化原理，知道如何对一个函数进行自动初始化。</p>
+<p>目标3：知道 rt-thread完整版本 与 rt-thread-nano版本 的区别。</p>
+<h3 id="作业">作业</h3>
+<p>作业1【学习营实战——1】：基于rt-thread4.0.2，能根据<a href="https://github.com/RT-Thread/rt-thread/blob/master/bsp/stm32/docs/STM32%E7%B3%BB%E5%88%97BSP%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B.md">BSP制作教程</a> 及群里分享的视频《2.RT-Thread移植》，让自己的板子在RT-Thread上运行起来，了解BSP的制作。</p>
+<p>作业2：能使用信号量的方式，同步LED的亮灭，500ms亮 500ms灭。</p>
+<h3 id="总结">总结</h3>
+<p>本周我们已经掌握了RT-Thread基础、内核、BSP制作等内容。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="tag">
+                    单片机
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
+                  <h3 class="post-title">
+                    MSP430G2553学习笔记：入门😁
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
