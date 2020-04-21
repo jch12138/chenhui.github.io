@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587377497835">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587437730560">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://baldstudio.cn">
-        <img src="https://baldstudio.cn/images/avatar.png?v=1587377497835" class="site-logo">
+        <img src="https://baldstudio.cn/images/avatar.png?v=1587437730560" class="site-logo">
         <h1 class="site-title">博德工作室</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -159,12 +159,182 @@
 </ul>
 <h3 id="目标">目标</h3>
 <p>在<strong>掌握以上内容之后</strong>，我们在此基础上<strong>还</strong>需要完成以下几个目标：</p>
-<p>目标1：了解RT-Thread启动流程。</p>
-<p>目标2：了解RT-Thread自动初始化原理，知道如何对一个函数进行自动初始化。</p>
-<p>目标3：知道 rt-thread完整版本 与 rt-thread-nano版本 的区别。</p>
+<p><strong>目标1：了解RT-Thread启动流程。</strong><br>
+RT-Thread启动并不和裸机代码一样,直接从汇编启动文件直接跳转到main函数.RT-Thread中在进入<code>main</code>函数之前,会先进入<code>rtthread_startup()</code>函数中,完成系统初始化之后,再跳转到用户主函数.<br>
+<img src="https://baldstudio.cn/post-images/1587434046315.png" alt="" loading="lazy"><br>
+从<code>startup_xx.S</code>启动之后,会根据编译器进入不同的入口函数,MDK中是<code>$Sub$$main()</code>,IAR中是<code>__low_level_init()</code>,gcc中是<code>entry()</code>.这些入口函数是由编译器自身规定的.在这之后,会跳转到统一的<code>rtthread_startup()</code>函数中,在这个函数里完成系统的初始化.</p>
+<pre><code class="language-c">int rtthread_startup(void)
+{
+    rt_hw_interrupt_disable();
+
+    /* board level initialization
+     * NOTE: please initialize heap inside board initialization.
+     */
+    rt_hw_board_init();
+
+    /* show RT-Thread version */
+    rt_show_version();
+
+    /* timer system initialization */
+    rt_system_timer_init();
+
+    /* scheduler system initialization */
+    rt_system_scheduler_init();
+
+#ifdef RT_USING_SIGNALS
+    /* signal system initialization */
+    rt_system_signal_init();
+#endif
+
+    /* create init_thread */
+    rt_application_init();
+
+    /* timer thread initialization */
+    rt_system_timer_thread_init();
+
+    /* idle thread initialization */
+    rt_thread_idle_init();
+
+#ifdef RT_USING_SMP
+    rt_hw_spin_lock(&amp;_cpus_lock);
+#endif /*RT_USING_SMP*/
+
+    /* start scheduler */
+    rt_system_scheduler_start();
+
+    /* never reach here */
+    return 0;
+}
+</code></pre>
+<p><strong>目标2：了解RT-Thread自动初始化原理，知道如何对一个函数进行自动初始化。</strong><br>
+自动初始化机制是指初始化函数不需要被显式调用，只需要在函数定义处通过宏定义的方式进行申明，<br>
+就会在系统启动过程中被执行。<br>
+自动初始化执行的地方如图所示<br>
+<img src="https://baldstudio.cn/post-images/1587436687793.png" alt="" loading="lazy"><br>
+<code>rt_components_board_init()</code>在系统调度启动之前就执行了,主要是初始化相关硬件环境.执行这个函数时将会遍历通过 INIT_BOARD_EXPORT(fn) 申明的初始化函数表，并调用各个函数。<br>
+<code>rt_components_init()</code>函数会在操作系统运行起来之后创建的 main 线程里被调用执行，这个时候硬件环境和操作系统已经初始化完成，可以执行应用相关代码。 rt_components_init() 函数会遍历通过剩下的其他几个宏申明的初始化函数表。<br>
+RT-Thread提供的自动初始化函数类型有以下几种:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">初始化顺序</th>
+<th style="text-align:center">宏接口</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">INIT_BOARD_EXPORT(fn)</td>
+<td style="text-align:center">非常早期的初始化，此时调度器还未启动</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">INIT_PREV_EXPORT(fn)</td>
+<td style="text-align:center">主要是用于纯软件的初始化、没有太多依赖的函数</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">INIT_DEVICE_EXPORT(fn)</td>
+<td style="text-align:center">外设驱动初始化相关，比如网卡设备</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">INIT_COMPONENT_EXPORT(fn)</td>
+<td style="text-align:center">组件初始化，比如文件系统或者 LWIP</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">INIT_ENV_EXPORT(fn)</td>
+<td style="text-align:center">系统环境初始化，比如挂载文件系统</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">INIT_ENV_EXPORT(fn)</td>
+<td style="text-align:center">应用初始化，比如 GUI 应用</td>
+</tr>
+</tbody>
+</table>
+<p>自动初始化的原理是RT-Thread在链接脚本里自定义了一个RTI符号段,在编译时把所有通过宏声明的函数地址放在这个段中.在执行的时候,将函数地址读出并执行.</p>
+<p><strong>目标3：知道 rt-thread完整版本 与 rt-thread-nano版本 的区别.</strong><br>
+RT-Thread完整版不仅仅是一个实时内核，还具备丰富的中间层组件.<br>
+<img src="https://baldstudio.cn/post-images/1587437398327.png" alt="" loading="lazy"><br>
+它具体包括以下部分:</p>
+<ul>
+<li>内核层：RT-Thread 内核，是 RT-Thread 的核心部分，包括了内核系统中对象的实现，例如多线程及其调度、信号量、邮箱、消息队列、内存管理、定时器等；libcpu/BSP（芯片移植相关文件 / 板级支持包）与硬件密切相关，由外设驱动和 CPU 移植构成。</li>
+<li>组件与服务层：组件是基于 RT-Thread 内核之上的上层软件，例如虚拟文件系统、FinSH 命令行界面、网络框架、设备框架等。采用模块化设计，做到组件内部高内聚，组件之间低耦合。</li>
+<li>RT-Thread 软件包：运行于 RT-Thread 物联网操作系统平台上，面向不同应用领域的通用软件组件，由描述信息、源代码或库文件组成。RT-Thread 提供了开放的软件包平台，这里存放了官方提供或开发者提供的软件包，该平台为开发者提供了众多可重用软件包的选择，这也是 RT-Thread 生态的重要组成部分。软件包生态对于一个操作系统的选择至关重要，因为这些软件包具有很强的可重用性，模块化程度很高，极大的方便应用开发者在最短时间内，打造出自己想要的系统。RT-Thread 已经支持的软件包数量已经达到 60+，如下举例：
+<ul>
+<li>物联网相关的软件包：Paho MQTT、WebClient、mongoose、WebTerminal 等等。</li>
+<li>脚本语言相关的软件包：目前支持 JerryScript、MicroPython。</li>
+<li>多媒体相关的软件包：Openmv、mupdf。</li>
+<li>工具类软件包：CmBacktrace、EasyFlash、EasyLogger、SystemView。</li>
+<li>系统相关的软件包：RTGUI、Persimmon UI、lwext4、partition、SQLite 等等。</li>
+<li>外设库与驱动类软件包：RealTek RTL8710BN SDK。</li>
+<li>其他。<br>
+RT-Thread Nano是一个极简版的硬实时内核，它是由 C 语言开发，采用面向对象的编程思维，具有良好的代码风格，是一款可裁剪的、抢占式实时多任务的 RTOS。其内存资源占用极小，功能包括任务处理、软件定时器、信号量、邮箱和实时调度等相对完整的实时操作系统特性。适用于家电、消费电子、医疗设备、工控等领域大量使用的 32 位 ARM 入门级 MCU 的场合。<br>
+<img src="https://baldstudio.cn/post-images/1587437637290.png" alt="" loading="lazy"></li>
+</ul>
+</li>
+</ul>
 <h3 id="作业">作业</h3>
-<p>作业1【学习营实战——1】：基于rt-thread4.0.2，能根据<a href="https://github.com/RT-Thread/rt-thread/blob/master/bsp/stm32/docs/STM32%E7%B3%BB%E5%88%97BSP%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B.md">BSP制作教程</a> 及群里分享的视频《2.RT-Thread移植》，让自己的板子在RT-Thread上运行起来，了解BSP的制作。</p>
-<p>作业2：能使用信号量的方式，同步LED的亮灭，500ms亮 500ms灭。</p>
+<p>作业1【学习营实战——1】：基于rt-thread4.0.2，能根据<a href="https://github.com/RT-Thread/rt-thread/blob/master/bsp/stm32/docs/STM32%E7%B3%BB%E5%88%97BSP%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B.md">BSP制作教程</a> 及群里分享的视频《2.RT-Thread移植》，让自己的板子在RT-Thread上运行起来，了解BSP的制作。<br>
+BSP已做好,地址在<a href="https://github.com/jch12138/stm32-f407vet6-minisystem-rtt">github</a><br>
+作业2：能使用信号量的方式，同步LED的亮灭，500ms亮 500ms灭。</p>
+<pre><code class="language-c">#include &quot;rtthread.h&quot;
+#include &lt;rtdevice.h&gt;
+#include &lt;board.h&gt;
+
+/* defined the LED0 pin: PC13 */
+#define LED0_PIN    GET_PIN(C, 13)
+
+static rt_sem_t led = RT_NULL;
+
+static void led_open_entry(void *parameter)
+{
+    while(1)
+    {
+        rt_sem_take(led,RT_WAITING_FOREVER);
+        rt_pin_write(LED0_PIN,PIN_LOW);
+        rt_thread_mdelay(500);
+        rt_sem_release(led);
+    }
+}
+
+static void led_close_entry(void *parameter)
+{
+    while (1)
+    {
+        rt_sem_take(led,RT_WAITING_FOREVER);
+        rt_pin_write(LED0_PIN,PIN_HIGH);
+        rt_thread_mdelay(500);
+        rt_sem_release(led);
+    }   
+}
+
+int led_sem_test(int argc, char **argv)
+{
+    rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
+    led = rt_sem_create(&quot;led&quot;,1,RT_IPC_FLAG_FIFO);
+    rt_thread_t tid1 = rt_thread_create(&quot;led_open&quot;,
+                                    led_open_entry,
+                                    RT_NULL,
+                                    1024,
+                                    3,
+                                    10);
+
+    rt_thread_t tid2 = rt_thread_create(&quot;led_close&quot;,
+                                    led_close_entry,
+                                    RT_NULL,
+                                    1024,
+                                    3,
+                                    10);
+    rt_thread_startup(tid1);
+    rt_thread_startup(tid2);
+
+}
+MSH_CMD_EXPORT(led_sem_test,led_sem_test);
+</code></pre>
 <h3 id="总结">总结</h3>
 <p>本周我们已经掌握了RT-Thread基础、内核、BSP制作等内容。</p>
 
