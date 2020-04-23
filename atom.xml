@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://localhost:4001</id>
+    <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-23T13:27:21.952Z</updated>
+    <updated>2020-04-23T13:30:10.027Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://localhost:4001"/>
-    <link rel="self" href="http://localhost:4001/atom.xml"/>
+    <link rel="alternate" href="https://baldstudio.cn"/>
+    <link rel="self" href="https://baldstudio.cn/atom.xml"/>
     <subtitle>Keep Foolish, Keep Hungry</subtitle>
-    <logo>http://localhost:4001/images/avatar.png</logo>
-    <icon>http://localhost:4001/favicon.ico</icon>
+    <logo>https://baldstudio.cn/images/avatar.png</logo>
+    <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 博德工作室</rights>
     <entry>
         <title type="html"><![CDATA[RT-Thread学习笔记（一）]]></title>
-        <id>http://localhost:4001/post/rt-thread-xue-xi-bi-ji-yi/</id>
-        <link href="http://localhost:4001/post/rt-thread-xue-xi-bi-ji-yi/">
+        <id>https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/</id>
+        <link href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/">
         </link>
         <updated>2020-04-23T13:21:48.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 黄震</strong><br>
@@ -87,14 +87,14 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[[嵌入式系统]mini2440课程实验]]></title>
-        <id>http://localhost:4001/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/</id>
-        <link href="http://localhost:4001/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/">
+        <id>https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/</id>
+        <link href="https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/">
         </link>
         <updated>2020-04-23T10:54:13.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
 <h2 id="实验一-开发板学习和程序下载">实验一 开发板学习和程序下载.</h2>
 <p>指导书中推荐的开发环境是ADS,由于本人习惯使用KEIL,所以将原工程移植到了keil,主要是修改了启动文件中一些编译器相关的宏定义.一些是ads中独有的,keil下编译会报错.<br>
-<img src="http://localhost:4001/post-images/1587639557783.png" alt="搭建好的开发环境" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587639557783.png" alt="搭建好的开发环境" loading="lazy"><br>
 开发的大致步骤是</p>
 <ol>
 <li>在vscode中编辑代码.</li>
@@ -150,7 +150,7 @@ void LED_Test(void)
 }
 </code></pre>
 <h3 id="实验效果">实验效果</h3>
-<figure data-type="image" tabindex="1"><img src="http://localhost:4001/post-images/1587646055419.gif" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://baldstudio.cn/post-images/1587646055419.gif" alt="" loading="lazy"></figure>
 <h2 id="实验三-中断控制">实验三 中断控制</h2>
 <h3 id="基本目标">基本目标</h3>
 <p><strong>按下任意按键都可以使LED开始闪烁</strong></p>
@@ -293,7 +293,7 @@ static void __irq key_handler(void)
 }
 </code></pre>
 <h3 id="实验效果-2">实验效果</h3>
-<figure data-type="image" tabindex="2"><img src="http://localhost:4001/post-images/1587646078909.gif" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://baldstudio.cn/post-images/1587646078909.gif" alt="" loading="lazy"></figure>
 <h2 id="实验四-定时器实验">实验四 定时器实验</h2>
 <h3 id="基本目标-2">基本目标</h3>
 <p>编程实现测试程序运行后过 5 秒开启 LED 跑马灯</p>
@@ -400,7 +400,7 @@ void timer0_test(void)
 }
 </code></pre>
 <h3 id="实验效果-3">实验效果</h3>
-<figure data-type="image" tabindex="3"><img src="http://localhost:4001/post-images/1587646096856.gif" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://baldstudio.cn/post-images/1587646096856.gif" alt="" loading="lazy"></figure>
 <h2 id="实验五-nand-flash实验">实验五 NAND FLASH实验</h2>
 <h3 id="基本目标-3">基本目标</h3>
 <p><strong>实现在NAND FLASH上数据的读取和写入</strong></p>
@@ -476,7 +476,7 @@ void timer0_test(void)
 <p><strong>3、开发板中，NAND Flash 测试读写数据的地址至少是多少?</strong><br>
 若不是从NAND引导启动,可以从0x00000000开始读取,若从NAND引导启动,需往后推4kb.</p>
 <h3 id="实验效果-4">实验效果</h3>
-<figure data-type="image" tabindex="4"><img src="http://localhost:4001/post-images/1587645234893.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://baldstudio.cn/post-images/1587645234893.png" alt="" loading="lazy"></figure>
 <h2 id="实验六-触摸屏实验">实验六 触摸屏实验</h2>
 <h3 id="基本目标-4">基本目标</h3>
 <p><strong>编程实现触摸坐标点的探测</strong></p>
@@ -640,7 +640,7 @@ static void __irq timer1_handler(void)
 }
 </code></pre>
 <h3 id="实验效果-5">实验效果</h3>
-<figure data-type="image" tabindex="5"><img src="http://localhost:4001/post-images/1587645087431.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://baldstudio.cn/post-images/1587645087431.png" alt="" loading="lazy"></figure>
 <h2 id="实验七-lcd实验">实验七 LCD实验</h2>
 <h3 id="基本目标-5">基本目标</h3>
 <p><strong>编程实现在 LCD 上绘制自定义的图像</strong></p>
@@ -686,7 +686,7 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <strong>3. 字模软件中，MSB 和 LSB 对显示图片有何影响？为什么？</strong><br>
 会使图片左右颠倒.因为像素的排列顺序反了.</p>
 <h3 id="实验效果-6">实验效果</h3>
-<figure data-type="image" tabindex="6"><img src="http://localhost:4001/post-images/1587645032803.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://baldstudio.cn/post-images/1587645032803.jpg" alt="" loading="lazy"></figure>
 <h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
 <h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
@@ -694,8 +694,8 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
     </entry>
     <entry>
         <title type="html"><![CDATA[[RCEA学习营]第1周]]></title>
-        <id>http://localhost:4001/post/rcea-xue-xi-ying-di-1-zhou/</id>
-        <link href="http://localhost:4001/post/rcea-xue-xi-ying-di-1-zhou/">
+        <id>https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/</id>
+        <link href="https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/">
         </link>
         <updated>2020-04-20T10:06:52.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
@@ -761,7 +761,7 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <p>在<strong>掌握以上内容之后</strong>，我们在此基础上<strong>还</strong>需要完成以下几个目标：</p>
 <p><strong>目标1：了解RT-Thread启动流程。</strong><br>
 RT-Thread启动并不和裸机代码一样,直接从汇编启动文件直接跳转到main函数.RT-Thread中在进入<code>main</code>函数之前,会先进入<code>rtthread_startup()</code>函数中,完成系统初始化之后,再跳转到用户主函数.<br>
-<img src="http://localhost:4001/post-images/1587434046315.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587434046315.png" alt="" loading="lazy"><br>
 从<code>startup_xx.S</code>启动之后,会根据编译器进入不同的入口函数,MDK中是<code>$Sub$$main()</code>,IAR中是<code>__low_level_init()</code>,gcc中是<code>entry()</code>.这些入口函数是由编译器自身规定的.在这之后,会跳转到统一的<code>rtthread_startup()</code>函数中,在这个函数里完成系统的初始化.</p>
 <pre><code class="language-c">int rtthread_startup(void)
 {
@@ -810,7 +810,7 @@ RT-Thread启动并不和裸机代码一样,直接从汇编启动文件直接跳�
 自动初始化机制是指初始化函数不需要被显式调用，只需要在函数定义处通过宏定义的方式进行申明，<br>
 就会在系统启动过程中被执行。<br>
 自动初始化执行的地方如图所示<br>
-<img src="http://localhost:4001/post-images/1587436687793.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587436687793.png" alt="" loading="lazy"><br>
 <code>rt_components_board_init()</code>在系统调度启动之前就执行了,主要是初始化相关硬件环境.执行这个函数时将会遍历通过 INIT_BOARD_EXPORT(fn) 申明的初始化函数表，并调用各个函数。<br>
 <code>rt_components_init()</code>函数会在操作系统运行起来之后创建的 main 线程里被调用执行，这个时候硬件环境和操作系统已经初始化完成，可以执行应用相关代码。 rt_components_init() 函数会遍历通过剩下的其他几个宏申明的初始化函数表。<br>
 RT-Thread提供的自动初始化函数类型有以下几种:</p>
@@ -858,7 +858,7 @@ RT-Thread提供的自动初始化函数类型有以下几种:</p>
 <p>自动初始化的原理是RT-Thread在链接脚本里自定义了一个RTI符号段,在编译时把所有通过宏声明的函数地址放在这个段中.在执行的时候,将函数地址读出并执行.</p>
 <p><strong>目标3：知道 rt-thread完整版本 与 rt-thread-nano版本 的区别.</strong><br>
 RT-Thread完整版不仅仅是一个实时内核，还具备丰富的中间层组件.<br>
-<img src="http://localhost:4001/post-images/1587437398327.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587437398327.png" alt="" loading="lazy"><br>
 它具体包括以下部分:</p>
 <ul>
 <li>内核层：RT-Thread 内核，是 RT-Thread 的核心部分，包括了内核系统中对象的实现，例如多线程及其调度、信号量、邮箱、消息队列、内存管理、定时器等；libcpu/BSP（芯片移植相关文件 / 板级支持包）与硬件密切相关，由外设驱动和 CPU 移植构成。</li>
@@ -873,7 +873,7 @@ RT-Thread完整版不仅仅是一个实时内核，还具备丰富的中间层�
 <li>外设库与驱动类软件包：RealTek RTL8710BN SDK。</li>
 <li>其他。<br>
 RT-Thread Nano是一个极简版的硬实时内核，它是由 C 语言开发，采用面向对象的编程思维，具有良好的代码风格，是一款可裁剪的、抢占式实时多任务的 RTOS。其内存资源占用极小，功能包括任务处理、软件定时器、信号量、邮箱和实时调度等相对完整的实时操作系统特性。适用于家电、消费电子、医疗设备、工控等领域大量使用的 32 位 ARM 入门级 MCU 的场合。<br>
-<img src="http://localhost:4001/post-images/1587437637290.png" alt="" loading="lazy"></li>
+<img src="https://baldstudio.cn/post-images/1587437637290.png" alt="" loading="lazy"></li>
 </ul>
 </li>
 </ul>
@@ -941,8 +941,8 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
     </entry>
     <entry>
         <title type="html"><![CDATA[MSP430G2553学习笔记：入门😁]]></title>
-        <id>http://localhost:4001/post/msp430g2553-xue-xi-bi-ji-ru-men/</id>
-        <link href="http://localhost:4001/post/msp430g2553-xue-xi-bi-ji-ru-men/">
+        <id>https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/</id>
+        <link href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
         </link>
         <updated>2020-04-14T08:59:26.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 许威</strong><br>
@@ -956,14 +956,14 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
 <p>LCD1602显示器</p>
 </li>
 </ul>
-<figure data-type="image" tabindex="1"><img src="http://localhost:4001/post-images/1586854858163.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://baldstudio.cn/post-images/1586854858163.jpg" alt="" loading="lazy"></figure>
 <h3 id="线路连接">线路连接</h3>
 <ul>
 <li>
 <h4 id="查看lcd1602的使用手册的接口说明">查看LCD1602的使用手册的接口说明</h4>
 </li>
 </ul>
-<figure data-type="image" tabindex="2"><img src="http://localhost:4001/post-images/1586854867204.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://baldstudio.cn/post-images/1586854867204.jpg" alt="" loading="lazy"></figure>
 <ul>
 <li>
 <h4 id="具体接线">具体接线</h4>
@@ -981,7 +981,7 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
 <p>​	只要接的对，疯狂走线也没有问题😂。由于MSP430工作电压为3.3V，LCD1602的工作电压为5V，这里用了USB转TTL模块给LCD供电。MSP430用USB线供电。❀两开花❀</p>
 </li>
 </ul>
-<figure data-type="image" tabindex="3"><img src="http://localhost:4001/post-images/1586854881991.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://baldstudio.cn/post-images/1586854881991.jpg" alt="" loading="lazy"></figure>
 <h3 id="点亮lcd显示内容">点亮LCD：显示内容</h3>
 <p>在LCD上显示东西需要分两个步骤，一个是发送指令（Command），另一个是发送数据（Data）。</p>
 <p>指令用于确定显示位置和LCD显示设置。数据就是显示的内容。</p>
@@ -1238,20 +1238,20 @@ void TIMERA_init()
     </entry>
     <entry>
         <title type="html"><![CDATA[[麻雀一号]垃圾分类助手开发历程]]></title>
-        <id>http://localhost:4001/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/</id>
-        <link href="http://localhost:4001/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
+        <id>https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/</id>
+        <link href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
         </link>
         <updated>2020-04-13T14:49:14.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
 <h2 id="简单介绍">简单介绍</h2>
 <p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
 我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
-<img src="http://localhost:4001/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
+<img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
 <blockquote>
 <p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片,内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
 </blockquote>
 <p>官方提供的sdk是基于RT-Thread v3.0.1的,版本有点老,略微有点让人有点不爽,想自己适配最新版,可是报了好多错,还是先老老实实用官方的吧😂.<br>
-<img src="http://localhost:4001/post-images/1586790191438.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1586790191438.png" alt="" loading="lazy"><br>
 体验了一下子之后,发现官方sdk的功能已经很完善了,基本把这块板上所有资源都用到了.但是依然有点遗憾,官方的menuconfig没有适配好.早期适配了一下之后,就都在直接改&lt;rtconfig.h&gt;.导致一旦使用menuconfig后,会缺少大量宏定义导致编译失败.</p>
 <h2 id="如何使用">如何使用</h2>
 <p>我原来使用了很久的STM32,熟悉了使用jlink下载的方式,拿到这块板,突然发现不能使用jlink,只能用串口下载的方式,有点懵逼😵.以前接触过串口下载,唯一的感觉就是慢,还不能打断点调试.<br>
@@ -1265,7 +1265,7 @@ void TIMERA_init()
 <ol>
 <li>不能直接用rtthread.bin升级,首先要使用ota打包工具打包成bootloader可以使用的包.</li>
 <li>打包的选项要和图中一致.我之前因为没有使用压缩,导致包太大,无法下载到开发板中,没有使用加密,开发板不接受没有加密过的包.版本号一定要比开发板中运行的固件版本号高,不然无法更新.<br>
-<img src="http://localhost:4001/post-images/1586832193569.png" alt="" loading="lazy"></li>
+<img src="https://baldstudio.cn/post-images/1586832193569.png" alt="" loading="lazy"></li>
 </ol>
 <h2 id="开发进度">开发进度</h2>
 <ul>
@@ -1445,7 +1445,7 @@ MSH_CMD_EXPORT(key_photo, key photo);
 </code></pre>
 <h2 id="联合调试">联合调试</h2>
 <p>在完成各单项功能之后,我开始将这些功能联合起来调试.从1.0.0不断迭代到1.9.1,经历了90多次迭代,六百多行代码,才把这些功能调通.好在最后所有功能都正常.下面是总的系统框图.<br>
-<img src="http://localhost:4001/post-images/1587376262709.png" alt="" loading="lazy"></p>
+<img src="https://baldstudio.cn/post-images/1587376262709.png" alt="" loading="lazy"></p>
 <h2 id="演示效果">演示效果</h2>
 <p><video src="../../images/VID20200419195427.mp4"  controls='0' height=auto width=100%> </video></p>
 <h2 id="代码地址">代码地址</h2>
@@ -1456,8 +1456,8 @@ MSH_CMD_EXPORT(key_photo, key photo);
     </entry>
     <entry>
         <title type="html"><![CDATA[成功为RT-Thread主线贡献代码😁]]></title>
-        <id>http://localhost:4001/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/</id>
-        <link href="http://localhost:4001/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
+        <id>https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/</id>
+        <link href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
         </link>
         <updated>2020-04-10T08:01:02.000Z</updated>
         <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong><br>
@@ -1473,7 +1473,7 @@ FINSH_FUNCTION_EXPORT(clear,clear the terminal screen);
 MSH_CMD_EXPORT(clear,clear the terminal screen);
 </code></pre>
 <h2 id="使用效果">使用效果</h2>
-<figure data-type="image" tabindex="1"><img src="http://localhost:4001/post-images/1586505983582.gif" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://baldstudio.cn/post-images/1586505983582.gif" alt="" loading="lazy"></figure>
 <h2 id="总结">总结</h2>
 <p>总共提了3次PR才过,失败的原因有英文不过关,无法用英文准确表述自己意图,最后使用中文才通过,提交PR时要尽量表述清楚,格式规范,奥利给!</p>
 ]]></content>

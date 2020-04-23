@@ -3,10 +3,10 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[RCEA学习营]第1周 | 博德工作室</title>
-<link rel="shortcut icon" href="http://localhost:4001/favicon.ico?v=1587648435398">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587648435489">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="http://localhost:4001/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="[RCEA学习营]第1周 | 博德工作室 - Atom Feed" href="http://localhost:4001/atom.xml">
+<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="[RCEA学习营]第1周 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -23,8 +23,8 @@
     <div class="main">
       <div class="main-content">
         <div class="site-header">
-  <a href="http://localhost:4001">
-  <img class="avatar" src="http://localhost:4001/images/avatar.png?v=1587648435398" alt="">
+  <a href="https://baldstudio.cn">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587648435489" alt="">
   </a>
   <h1 class="site-title">
     博德工作室
@@ -87,13 +87,13 @@
                 8 min read
               </span>
               
-                <a href="http://localhost:4001/tag/tIHJO5Wum/" class="post-tag">
+                <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tag">
                   # 单片机
                 </a>
               
             </div>
             
-              <img class="post-feature-image" src="http://localhost:4001/post-images/rcea-xue-xi-ying-di-1-zhou.png" alt="">
+              <img class="post-feature-image" src="https://baldstudio.cn/post-images/rcea-xue-xi-ying-di-1-zhou.png" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
@@ -160,7 +160,7 @@
 <p>在<strong>掌握以上内容之后</strong>，我们在此基础上<strong>还</strong>需要完成以下几个目标：</p>
 <p><strong>目标1：了解RT-Thread启动流程。</strong><br>
 RT-Thread启动并不和裸机代码一样,直接从汇编启动文件直接跳转到main函数.RT-Thread中在进入<code>main</code>函数之前,会先进入<code>rtthread_startup()</code>函数中,完成系统初始化之后,再跳转到用户主函数.<br>
-<img src="http://localhost:4001/post-images/1587434046315.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587434046315.png" alt="" loading="lazy"><br>
 从<code>startup_xx.S</code>启动之后,会根据编译器进入不同的入口函数,MDK中是<code>$Sub$$main()</code>,IAR中是<code>__low_level_init()</code>,gcc中是<code>entry()</code>.这些入口函数是由编译器自身规定的.在这之后,会跳转到统一的<code>rtthread_startup()</code>函数中,在这个函数里完成系统的初始化.</p>
 <pre><code class="language-c">int rtthread_startup(void)
 {
@@ -209,7 +209,7 @@ RT-Thread启动并不和裸机代码一样,直接从汇编启动文件直接跳�
 自动初始化机制是指初始化函数不需要被显式调用，只需要在函数定义处通过宏定义的方式进行申明，<br>
 就会在系统启动过程中被执行。<br>
 自动初始化执行的地方如图所示<br>
-<img src="http://localhost:4001/post-images/1587436687793.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587436687793.png" alt="" loading="lazy"><br>
 <code>rt_components_board_init()</code>在系统调度启动之前就执行了,主要是初始化相关硬件环境.执行这个函数时将会遍历通过 INIT_BOARD_EXPORT(fn) 申明的初始化函数表，并调用各个函数。<br>
 <code>rt_components_init()</code>函数会在操作系统运行起来之后创建的 main 线程里被调用执行，这个时候硬件环境和操作系统已经初始化完成，可以执行应用相关代码。 rt_components_init() 函数会遍历通过剩下的其他几个宏申明的初始化函数表。<br>
 RT-Thread提供的自动初始化函数类型有以下几种:</p>
@@ -257,7 +257,7 @@ RT-Thread提供的自动初始化函数类型有以下几种:</p>
 <p>自动初始化的原理是RT-Thread在链接脚本里自定义了一个RTI符号段,在编译时把所有通过宏声明的函数地址放在这个段中.在执行的时候,将函数地址读出并执行.</p>
 <p><strong>目标3：知道 rt-thread完整版本 与 rt-thread-nano版本 的区别.</strong><br>
 RT-Thread完整版不仅仅是一个实时内核，还具备丰富的中间层组件.<br>
-<img src="http://localhost:4001/post-images/1587437398327.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587437398327.png" alt="" loading="lazy"><br>
 它具体包括以下部分:</p>
 <ul>
 <li>内核层：RT-Thread 内核，是 RT-Thread 的核心部分，包括了内核系统中对象的实现，例如多线程及其调度、信号量、邮箱、消息队列、内存管理、定时器等；libcpu/BSP（芯片移植相关文件 / 板级支持包）与硬件密切相关，由外设驱动和 CPU 移植构成。</li>
@@ -272,7 +272,7 @@ RT-Thread完整版不仅仅是一个实时内核，还具备丰富的中间层�
 <li>外设库与驱动类软件包：RealTek RTL8710BN SDK。</li>
 <li>其他。<br>
 RT-Thread Nano是一个极简版的硬实时内核，它是由 C 语言开发，采用面向对象的编程思维，具有良好的代码风格，是一款可裁剪的、抢占式实时多任务的 RTOS。其内存资源占用极小，功能包括任务处理、软件定时器、信号量、邮箱和实时调度等相对完整的实时操作系统特性。适用于家电、消费电子、医疗设备、工控等领域大量使用的 32 位 ARM 入门级 MCU 的场合。<br>
-<img src="http://localhost:4001/post-images/1587437637290.png" alt="" loading="lazy"></li>
+<img src="https://baldstudio.cn/post-images/1587437637290.png" alt="" loading="lazy"></li>
 </ul>
 </li>
 </ul>
@@ -362,7 +362,7 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="http://localhost:4001/post/msp430g2553-xue-xi-bi-ji-ru-men/">
+            <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
               <h3 class="post-title">
                 MSP430G2553学习笔记：入门😁
               </h3>
@@ -374,7 +374,7 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
 
         <div class="site-footer">
   Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
-  <a class="rss" href="http://localhost:4001/atom.xml" target="_blank">
+  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
     <i class="ri-rss-line"></i> RSS
   </a>
 </div>
