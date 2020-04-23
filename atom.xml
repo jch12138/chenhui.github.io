@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-23T12:19:15.741Z</updated>
+    <updated>2020-04-23T12:49:18.654Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -73,6 +73,8 @@ void LED_Test(void)
     }
 }
 </code></pre>
+<h3 id="实验效果">实验效果</h3>
+<figure data-type="image" tabindex="1"><img src="https://baldstudio.cn/post-images/1587646055419.gif" alt="" loading="lazy"></figure>
 <h2 id="实验三-中断控制">实验三 中断控制</h2>
 <h3 id="基本目标">基本目标</h3>
 <p><strong>按下任意按键都可以使LED开始闪烁</strong></p>
@@ -214,6 +216,8 @@ static void __irq key_handler(void)
 #endif
 }
 </code></pre>
+<h3 id="实验效果-2">实验效果</h3>
+<figure data-type="image" tabindex="2"><img src="https://baldstudio.cn/post-images/1587646078909.gif" alt="" loading="lazy"></figure>
 <h2 id="实验四-定时器实验">实验四 定时器实验</h2>
 <h3 id="基本目标-2">基本目标</h3>
 <p>编程实现测试程序运行后过 5 秒开启 LED 跑马灯</p>
@@ -319,6 +323,8 @@ void timer0_test(void)
     }
 }
 </code></pre>
+<h3 id="实验效果-3">实验效果</h3>
+<figure data-type="image" tabindex="3"><img src="https://baldstudio.cn/post-images/1587646096856.gif" alt="" loading="lazy"></figure>
 <h2 id="实验五-nand-flash实验">实验五 NAND FLASH实验</h2>
 <h3 id="基本目标-3">基本目标</h3>
 <p><strong>实现在NAND FLASH上数据的读取和写入</strong></p>
@@ -393,6 +399,8 @@ void timer0_test(void)
 不能直接执行,必须先读取到RAM中,才能执行,因为nand由于制作工艺的原因，不能像其他一些memory一样通过数据和地址线访问，而只能通过IO顺序访问，因此访问效率较低，但是其传输速度快，所以适合做大容量存储器，而相对来说Nor Flash适合做代码存储。</p>
 <p><strong>3、开发板中，NAND Flash 测试读写数据的地址至少是多少?</strong><br>
 若不是从NAND引导启动,可以从0x00000000开始读取,若从NAND引导启动,需往后推4kb.</p>
+<h3 id="实验效果-4">实验效果</h3>
+<figure data-type="image" tabindex="4"><img src="https://baldstudio.cn/post-images/1587645234893.png" alt="" loading="lazy"></figure>
 <h2 id="实验六-触摸屏实验">实验六 触摸屏实验</h2>
 <h3 id="基本目标-4">基本目标</h3>
 <p><strong>编程实现触摸坐标点的探测</strong></p>
@@ -555,6 +563,8 @@ static void __irq timer1_handler(void)
     ClearPending(BIT_TIMER1); //SRCPND INTPND
 }
 </code></pre>
+<h3 id="实验效果-5">实验效果</h3>
+<figure data-type="image" tabindex="5"><img src="https://baldstudio.cn/post-images/1587645087431.png" alt="" loading="lazy"></figure>
 <h2 id="实验七-lcd实验">实验七 LCD实验</h2>
 <h3 id="基本目标-5">基本目标</h3>
 <p><strong>编程实现在 LCD 上绘制自定义的图像</strong></p>
@@ -599,6 +609,8 @@ void lcd_test(void)
 Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD+1)+(HOZVAL+1)}x{2x(CLKVAL+1)/(HCLK)}<br>
 <strong>3. 字模软件中，MSB 和 LSB 对显示图片有何影响？为什么？</strong><br>
 会使图片左右颠倒.因为像素的排列顺序反了.</p>
+<h3 id="实验效果-6">实验效果</h3>
+<figure data-type="image" tabindex="6"><img src="https://baldstudio.cn/post-images/1587645032803.jpg" alt="" loading="lazy"></figure>
 <h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
 <h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
