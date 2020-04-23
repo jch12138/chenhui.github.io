@@ -3,10 +3,10 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[麻雀一号]垃圾分类助手开发历程 | 博德工作室</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587648293123">
+<link rel="shortcut icon" href="http://localhost:4001/favicon.ico?v=1587648435398">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="[麻雀一号]垃圾分类助手开发历程 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
+<link rel="stylesheet" href="http://localhost:4001/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="[麻雀一号]垃圾分类助手开发历程 | 博德工作室 - Atom Feed" href="http://localhost:4001/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -22,8 +22,8 @@
     <div class="main">
       <div class="main-content">
         <div class="site-header">
-  <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587648293123" alt="">
+  <a href="http://localhost:4001">
+  <img class="avatar" src="http://localhost:4001/images/avatar.png?v=1587648435398" alt="">
   </a>
   <h1 class="site-title">
     博德工作室
@@ -86,13 +86,13 @@
                 10 min read
               </span>
               
-                <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tag">
+                <a href="http://localhost:4001/tag/tIHJO5Wum/" class="post-tag">
                   # 单片机
                 </a>
               
             </div>
             
-              <img class="post-feature-image" src="https://baldstudio.cn/post-images/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng.jpg" alt="">
+              <img class="post-feature-image" src="http://localhost:4001/post-images/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng.jpg" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
@@ -100,12 +100,12 @@
 <h2 id="简单介绍">简单介绍</h2>
 <p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
 我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
-<img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
+<img src="http://localhost:4001/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
 <blockquote>
 <p>麻雀一号开发板采用的主控芯片是 BK7252 , 是一款高性能 WiFi 模块，采用高集成的无线射频芯片,内部集成 2.4GHz Wi-Fi 1T1R 先进技术，支持摄像头图像输出，拥有最佳的功耗性能、射频性能、稳定性、通用性和可靠性，适用于各种应用和不同产品需求。模块内部拥有 512KB 内嵌 RAM 和 4Mbyte Flash 空间， CPU 主频高达 180Mhz。并且集成了天线开关、功率放大器、低噪放大器、过滤器、电源管理模块, 支持 802.11e 以及 WMM-PS 协议, 支持 WPA、 WPA2 和 WAPI 安全协议，同时集成了蓝牙 BLE 收发器，支持 BLE4.2，支持主机或从机模式。</p>
 </blockquote>
 <p>官方提供的sdk是基于RT-Thread v3.0.1的,版本有点老,略微有点让人有点不爽,想自己适配最新版,可是报了好多错,还是先老老实实用官方的吧😂.<br>
-<img src="https://baldstudio.cn/post-images/1586790191438.png" alt="" loading="lazy"><br>
+<img src="http://localhost:4001/post-images/1586790191438.png" alt="" loading="lazy"><br>
 体验了一下子之后,发现官方sdk的功能已经很完善了,基本把这块板上所有资源都用到了.但是依然有点遗憾,官方的menuconfig没有适配好.早期适配了一下之后,就都在直接改&lt;rtconfig.h&gt;.导致一旦使用menuconfig后,会缺少大量宏定义导致编译失败.</p>
 <h2 id="如何使用">如何使用</h2>
 <p>我原来使用了很久的STM32,熟悉了使用jlink下载的方式,拿到这块板,突然发现不能使用jlink,只能用串口下载的方式,有点懵逼😵.以前接触过串口下载,唯一的感觉就是慢,还不能打断点调试.<br>
@@ -119,7 +119,7 @@
 <ol>
 <li>不能直接用rtthread.bin升级,首先要使用ota打包工具打包成bootloader可以使用的包.</li>
 <li>打包的选项要和图中一致.我之前因为没有使用压缩,导致包太大,无法下载到开发板中,没有使用加密,开发板不接受没有加密过的包.版本号一定要比开发板中运行的固件版本号高,不然无法更新.<br>
-<img src="https://baldstudio.cn/post-images/1586832193569.png" alt="" loading="lazy"></li>
+<img src="http://localhost:4001/post-images/1586832193569.png" alt="" loading="lazy"></li>
 </ol>
 <h2 id="开发进度">开发进度</h2>
 <ul>
@@ -299,7 +299,7 @@ MSH_CMD_EXPORT(key_photo, key photo);
 </code></pre>
 <h2 id="联合调试">联合调试</h2>
 <p>在完成各单项功能之后,我开始将这些功能联合起来调试.从1.0.0不断迭代到1.9.1,经历了90多次迭代,六百多行代码,才把这些功能调通.好在最后所有功能都正常.下面是总的系统框图.<br>
-<img src="https://baldstudio.cn/post-images/1587376262709.png" alt="" loading="lazy"></p>
+<img src="http://localhost:4001/post-images/1587376262709.png" alt="" loading="lazy"></p>
 <h2 id="演示效果">演示效果</h2>
 <p><video src="../../images/VID20200419195427.mp4"  controls='0' height=auto width=100%> </video></p>
 <h2 id="代码地址">代码地址</h2>
@@ -331,7 +331,7 @@ MSH_CMD_EXPORT(key_photo, key photo);
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
+            <a href="http://localhost:4001/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
               <h3 class="post-title">
                 成功为RT-Thread主线贡献代码😁
               </h3>
@@ -343,7 +343,7 @@ MSH_CMD_EXPORT(key_photo, key photo);
 
         <div class="site-footer">
   Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
-  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
+  <a class="rss" href="http://localhost:4001/atom.xml" target="_blank">
     <i class="ri-rss-line"></i> RSS
   </a>
 </div>
