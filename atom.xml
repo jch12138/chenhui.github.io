@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-23T12:09:21.941Z</updated>
+    <updated>2020-04-23T12:19:15.741Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -394,7 +394,211 @@ void timer0_test(void)
 <p><strong>3、开发板中，NAND Flash 测试读写数据的地址至少是多少?</strong><br>
 若不是从NAND引导启动,可以从0x00000000开始读取,若从NAND引导启动,需往后推4kb.</p>
 <h2 id="实验六-触摸屏实验">实验六 触摸屏实验</h2>
+<h3 id="基本目标-4">基本目标</h3>
+<p><strong>编程实现触摸坐标点的探测</strong></p>
+<pre><code class="language-c">void ts_test(void)
+{
+    rADCDLY = (50000);
+    rADCCON = (1 &lt;&lt; 14) | (ADCPRS &lt;&lt; 6) | 
+                        (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (0 &lt;&lt; 1) | (0);
+    rADCTSC = (0 &lt;&lt; 8) | (1 &lt;&lt; 7) | (1 &lt;&lt; 6) | 
+                        (0 &lt;&lt; 5) | (1 &lt;&lt; 4) | (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (3);
+    pISR_ADC = (unsigned)ts_handler; //定义中断响应函数
+    rINTMSK = ~(BIT_ADC);
+    rINTSUBMSK = ~(BIT_SUB_TC);
+    while (1) ;
+}
+
+static void __irq ts_handler(void)
+{
+    U32 i;
+    U32 Pt[6];
+    rINTSUBMSK |= (BIT_SUB_ADC | BIT_SUB_TC);
+    if (rADCTSC &amp; 0x100)
+    {
+        Uart_Printf(&quot;\nStylus Up!!\n&quot;);
+        rADCTSC &amp;= 0xff; // Set stylus down interrupt
+    }
+    else
+    {
+        Uart_Printf(&quot;\nStylus Down!!\n&quot;);
+        rADCTSC = (0 &lt;&lt; 8) | (0 &lt;&lt; 7) | (1 &lt;&lt; 6) | (
+                            1 &lt;&lt; 5) | (0 &lt;&lt; 4) | (1 &lt;&lt; 3) | (0 &lt;&lt; 2) | (1);
+        for (i = 0; i &lt; 100; i++)
+            ;                   //delay to set up the next channel
+        for (i = 0; i &lt; 5; i++) //5 times
+        {
+            rADCCON |= 0x1; // Start X-position conversion
+            while (rADCCON &amp; 0x1)
+                ; // Check if Enable_start is low
+            while (!(0x8000 &amp; rADCCON))
+                ; // Check ECFLG
+            Pt[i] = (0x3ff &amp; rADCDAT0);
+        }
+        Pt[5] = (Pt[0] + Pt[1] + Pt[2] + Pt[3] + Pt[4]) / 5; //求一个平均值
+        Uart_Printf(&quot;X-Posion[AIN5] is %04d\n&quot;, Pt[5]);
+        rADCTSC = (0 &lt;&lt; 8) | (0 &lt;&lt; 7) | (1 &lt;&lt; 6) |
+                             (1 &lt;&lt; 5) | (0 &lt;&lt; 4) | (1 &lt;&lt; 3) | (0 &lt;&lt; 2) | (2);
+        // Down,GND,Ext vlt,Hi-Z,AIN7,Pullup Dis,Normal,Y-position
+        for (i = 0; i &lt; 100; i++)
+            ;                   //delay to set up the next channel
+        for (i = 0; i &lt; 5; i++) //5 times
+        {
+            rADCCON |= 0x1; // Start Y-position conversion
+            while (rADCCON &amp; 0x1)
+                ; // Check if Enable_start is low
+            while (!(0x8000 &amp; rADCCON))
+                ; // Check ECFLG
+            Pt[i] = (0x3ff &amp; rADCDAT1);
+        }
+        Pt[5] = (Pt[0] + Pt[1] + Pt[2] + Pt[3] + Pt[4]) / 5; //求一个平均值
+        Uart_Printf(&quot;Y-Posion[AIN7] is %04d\n&quot;, Pt[5]);
+        rADCTSC = (1 &lt;&lt; 8) | (1 &lt;&lt; 7) | (1 &lt;&lt; 6) | 
+                            (0 &lt;&lt; 5) | (1 &lt;&lt; 4) | (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (3);
+    }
+    rSUBSRCPND |= BIT_SUB_TC;
+    rINTSUBMSK = ~(BIT_SUB_TC); // Unmask sub interrupt (TC)
+    ClearPending(BIT_ADC);
+}
+</code></pre>
+<h3 id="思考题-5">思考题</h3>
+<p><strong>如何配置寄存器以实现 X、Y 坐标的连续采集？</strong><br>
+实现连续采集的方法是,在检测到笔尖落下后开启定时器中断,每隔一段时间采集一次坐标,直到检测到笔尖抬起,关闭定时器中断</p>
+<pre><code class="language-c">void ts_test(void)
+{
+    rADCDLY = (50000);
+    rADCCON = (1 &lt;&lt; 14) | (ADCPRS &lt;&lt; 6) | (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (0 &lt;&lt; 1) | (0);
+    rADCTSC = (0 &lt;&lt; 8) | (1 &lt;&lt; 7) | (1 &lt;&lt; 6) | (0 &lt;&lt; 5) | (1 &lt;&lt; 4) | (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (3);
+    pISR_ADC = (unsigned)ts_handler; //定义中断响应函数
+    rINTMSK = ~(BIT_ADC);
+    rINTSUBMSK = ~(BIT_SUB_TC);
+    while (1)
+        ;
+}
+
+U8 ts_flag = 0; /* 记录笔尖是否按下的全局变量,用来控制定时器中断 */
+
+static void __irq ts_handler(void)
+{
+    rINTSUBMSK |= (BIT_SUB_ADC | BIT_SUB_TC);
+    if (rADCTSC &amp; 0x100)
+    {
+        ts_flag = 0; /* 全局变量置零 */
+        Uart_Printf(&quot;\nStylus Up!!\n&quot;);
+        rADCTSC &amp;= 0xff; // Set stylus down interrupt
+    }
+    else
+    {
+        Uart_Printf(&quot;\nStylus Down!!\n&quot;);
+        ts_flag = 1; /* 全局变量置一 */
+        timer1_init(); /* 开启定时器中断 */
+        rADCTSC = (1 &lt;&lt; 8) | (1 &lt;&lt; 7) | (1 &lt;&lt; 6) | (0 &lt;&lt; 5) | 
+                            (1 &lt;&lt; 4) | (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (3);
+    }
+    rSUBSRCPND |= BIT_SUB_TC;
+    rINTSUBMSK = ~(BIT_SUB_TC); // Unmask sub interrupt (TC)
+    ClearPending(BIT_ADC);
+}
+
+/* 定时器1初始化 */
+void timer1_init(void)
+{
+    /* PCLK为50M,定时器输入时钟设置为12500hz,定时器重装值设置为1250,可以实现100ms一次的中断 */
+    ClearPending(BIT_TIMER1); //SRCPND INTPND
+    pISR_TIMER1 = (U32)timer1_handler;
+    rTCFG0 &amp;= ~0xff;
+    rTCFG0 |= 249; //prescaler = 249+1
+    rTCFG1 &amp;= ~0xf0;
+    rTCFG1 |= 3 &lt;&lt; 4; //mux = 1/16
+    rTCNTB1 = 1250;   //定时器装载值12500
+    rTCON &amp;= ~0xf00;
+    rTCON |= 1 &lt;&lt; 9;
+    rTCON = 0x09 &lt;&lt; 8;     //启动定时器
+    EnableIrq(BIT_TIMER1); //INTMSK
+}
+
+static void __irq timer1_handler(void)
+{
+    U32 i;
+    U32 Pt[6];
+    rADCTSC = (0 &lt;&lt; 8) | (0 &lt;&lt; 7) | (1 &lt;&lt; 6) | (1 &lt;&lt; 5) | 
+                        (0 &lt;&lt; 4) | (1 &lt;&lt; 3) | (0 &lt;&lt; 2) | (1);
+    for (i = 0; i &lt; 100; i++)
+        ;                   //delay to set up the next channel
+    for (i = 0; i &lt; 5; i++) //5 times
+    {
+        rADCCON |= 0x1; // Start X-position conversion
+        while (rADCCON &amp; 0x1)
+            ; // Check if Enable_start is low
+        while (!(0x8000 &amp; rADCCON))
+            ; // Check ECFLG
+        Pt[i] = (0x3ff &amp; rADCDAT0);
+    }
+    Pt[5] = (Pt[0] + Pt[1] + Pt[2] + Pt[3] + Pt[4]) / 5; //求一个平均值
+    Uart_Printf(&quot;X-Posion[AIN5] is %04d\n&quot;, Pt[5]);
+    rADCTSC = (0 &lt;&lt; 8) | (0 &lt;&lt; 7) | (1 &lt;&lt; 6) | (1 &lt;&lt; 5) | (0 &lt;&lt; 4) | 
+                        (1 &lt;&lt; 3) | (0 &lt;&lt; 2) | (2);
+    // Down,GND,Ext vlt,Hi-Z,AIN7,Pullup Dis,Normal,Y-position
+    for (i = 0; i &lt; 100; i++);     //delay to set up the next channel
+    for (i = 0; i &lt; 5; i++) //5 times
+    {
+        rADCCON |= 0x1; // Start Y-position conversion
+        while (rADCCON &amp; 0x1) ; // Check if Enable_start is low
+        while (!(0x8000 &amp; rADCCON)) ; // Check ECFLG
+        Pt[i] = (0x3ff &amp; rADCDAT1);
+    }
+    Pt[5] = (Pt[0] + Pt[1] + Pt[2] + Pt[3] + Pt[4]) / 5; //求一个平均值
+    Uart_Printf(&quot;Y-Posion[AIN7] is %04d\n&quot;, Pt[5]);
+    rADCTSC = (1 &lt;&lt; 8) | (1 &lt;&lt; 7) | (1 &lt;&lt; 6) | (0 &lt;&lt; 5) | (1 &lt;&lt; 4) |                                    (0 &lt;&lt; 3) | (0 &lt;&lt; 2) | (3);
+    if (ts_flag == 0)
+        rTCON = 0;            //停止定时器
+    ClearPending(BIT_TIMER1); //SRCPND INTPND
+}
+</code></pre>
 <h2 id="实验七-lcd实验">实验七 LCD实验</h2>
+<h3 id="基本目标-5">基本目标</h3>
+<p><strong>编程实现在 LCD 上绘制自定义的图像</strong></p>
+<pre><code class="language-c">static void lcd_test_word(void)
+{
+    unsigned char jch[3][32] = {
+        0x08,0x20,0x08,0x20,0xFF,0xFE,0x08,0x20,
+        0x00,0x80,0x08,0xF8,0x49,0x10,0x2A,0xA0,
+        0x28,0x50,0x08,0x90,0x1B,0xFE,0x29,0x10,
+        0x48,0x90,0x88,0x90,0x08,0x10,0x08,0x30,/*&quot;蒋&quot;,0*/
+
+        0x1F,0xF0,0x10,0x10,0x1F,0xF0,0x10,0x10,
+        0x1F,0xF0,0x00,0x00,0x3F,0xFC,0x20,0x00,
+        0x2F,0xF8,0x20,0x00,0x3F,0xFE,0x29,0x08,
+        0x28,0x90,0x48,0x60,0x4A,0x18,0x8C,0x06,/*&quot;晨&quot;,1*/
+
+        0x10,0x00,0x13,0xFE,0x92,0x02,0x54,0x44,
+        0x58,0x40,0x13,0xFC,0xFC,0x80,0x28,0xA0,
+        0x29,0x20,0x29,0xFC,0x28,0x20,0x28,0x20,
+        0x2B,0xFE,0x4C,0x20,0x48,0x20,0x80,0x20,/*&quot;辉&quot;,2*/
+        };
+
+    Brush_Background(0xFFFFFF); //绘制白色背景
+    draw_chineseword(50, 100, 0x0, jch[0]);
+    draw_chineseword(66, 100, 0x0, jch[1]);
+    draw_chineseword(82, 100, 0x0, jch[2]);
+}
+
+void lcd_test(void)
+{
+    Lcd_port_init();
+    Lcd_init();
+    Lcd_PowerEnable(1);
+    Lcd_EnvidOnOff(1);
+    lcd_test_word(); /* 在lcd上显示名字 */
+}
+</code></pre>
+<h3 id="思考题-6">思考题</h3>
+<p><strong>1. LCD中DMA的作用</strong><br>
+为了提高显示速度,一般在内存中开辟一块内存作为显存,映射到LCD的数据寄存器中,控制器只需向显存中写入数据,DMA部件会自动将数据传输到LCD寄存器中,完成显示.<br>
+<strong>2. LCD刷新率如何确定</strong><br>
+Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD+1)+(HOZVAL+1)}x{2x(CLKVAL+1)/(HCLK)}<br>
+<strong>3. 字模软件中，MSB 和 LSB 对显示图片有何影响？为什么？</strong><br>
+会使图片左右颠倒.因为像素的排列顺序反了.</p>
 <h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
 <h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
