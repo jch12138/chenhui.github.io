@@ -1,20 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[RCEA学习营]第1周 | 博德工作室</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587437730560">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587643681484">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
-
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="alternate" type="application/atom+xml" title="[RCEA学习营]第1周 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
@@ -22,84 +15,88 @@
 第一周主要任务是内核，使用到了RT-Thread simulator压缩包，还没用到ds18b20和esp8266。还没硬件的小伙伴们要赶快啦，后面就要用上了。
 以下整理了第一周学习需要掌握的5项内容，以及相关的学习文档/视..." />
     <meta name="keywords" content="单片机" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://baldstudio.cn">
-        <img src="https://baldstudio.cn/images/avatar.png?v=1587437730560" class="site-logo">
-        <h1 class="site-title">博德工作室</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://baldstudio.cn">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587643681484" alt="">
+  </a>
+  <h1 class="site-title">
+    博德工作室
+  </h1>
+  <p class="site-description">
+    Keep Foolish, Keep Hungry
+  </p>
+  <div class="menu-container">
+    
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+        <a href="/" class="menu">
+          首页
+        </a>
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+    
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
+        <a href="/archives" class="menu">
+          归档
+        </a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+    
       
-    </div>
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
+  <div class="social-container">
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
+    
       
-        
-      
-    </div>
-    <div class="site-description">
-      Keep Foolish, Keep Hungry
-    </div>
-    <div class="site-footer">
-      Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a> | <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a>
-    </div>
+    
   </div>
 </div>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">[RCEA学习营]第1周</h2>
-            <div class="post-date">2020-04-20</div>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              [RCEA学习营]第1周
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-20
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+                <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tag">
+                  # 单片机
+                </a>
+              
+            </div>
             
-              <div class="feature-container" style="background-image: url('https://baldstudio.cn/post-images/rcea-xue-xi-ying-di-1-zhou.png')">
-              </div>
+              <img class="post-feature-image" src="https://baldstudio.cn/post-images/rcea-xue-xi-ying-di-1-zhou.png" alt="">
             
-            <div class="post-content" v-pre>
-              <h3 id="需要掌握的内容">需要掌握的内容</h3>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="需要掌握的内容">需要掌握的内容</h3>
 <p>第一周主要任务是内核，使用到了RT-Thread simulator压缩包，还没用到ds18b20和esp8266。还没硬件的小伙伴们要赶快啦，后面就要用上了。</p>
 <p>以下整理了第一周学习需要掌握的<strong>5项</strong>内容，以及相关的学习文档/视频链接，内容较多但还算比较基础，推荐大家每天完成一项内容（根据经验，每次学习都会有部分人很积极且效率贼高，所以”每天完成一项“只是做个推荐而不强制，完成的早那就更好了），记得为自己预留做作业的时间。</p>
 <ul>
@@ -338,53 +335,90 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
 <h3 id="总结">总结</h3>
 <p>本周我们已经掌握了RT-Thread基础、内核、BSP制作等内容。</p>
 
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E9%9C%80%E8%A6%81%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%86%85%E5%AE%B9">需要掌握的内容</a></li>
+<li><a href="#%E7%9B%AE%E6%A0%87">目标</a></li>
+<li><a href="#%E4%BD%9C%E4%B8%9A">作业</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="tag">
-                    单片机
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
-                  <h3 class="post-title">
-                    MSP430G2553学习笔记：入门😁
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
+              <h3 class="post-title">
+                MSP430G2553学习笔记：入门😁
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
       </div>
     </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
+    <script>
+      hljs.initHighlightingOnLoad()
 
-AOS.init();
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
-</script>
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
-
-
-
+    </script>
   </body>
 </html>

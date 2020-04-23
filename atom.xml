@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-21T02:55:35.769Z</updated>
+    <updated>2020-04-23T12:08:04.333Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -10,6 +10,396 @@
     <logo>https://baldstudio.cn/images/avatar.png</logo>
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 博德工作室</rights>
+    <entry>
+        <title type="html"><![CDATA[[嵌入式系统]mini2440课程实验]]></title>
+        <id>https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/</id>
+        <link href="https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/">
+        </link>
+        <updated>2020-04-23T10:54:13.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="实验一-开发板学习和程序下载">实验一 开发板学习和程序下载.</h2>
+<p>指导书中推荐的开发环境是ADS,由于本人习惯使用KEIL,所以将原工程移植到了keil,主要是修改了启动文件中一些编译器相关的宏定义.一些是ads中独有的,keil下编译会报错.<br>
+<img src="https://baldstudio.cn/post-images/1587639557783.png" alt="搭建好的开发环境" loading="lazy"><br>
+开发的大致步骤是</p>
+<ol>
+<li>在vscode中编辑代码.</li>
+<li>使用keil编译出二进制文件.</li>
+<li>使用minitool下载到2440开发板中</li>
+</ol>
+<h2 id="实验二-led跑马灯实验">实验二 LED跑马灯实验</h2>
+<h3 id="基本要求">基本要求</h3>
+<p><strong>实现LED灯闪烁</strong></p>
+<pre><code class="language-c">void dely(U32 tt)
+{
+    U32 i;
+    for (; tt &gt; 0; tt--)
+    {
+        for (i = 0; i &lt; 10000; i++)
+        {
+        }
+    }
+}
+
+void LED_Test(void)
+{
+    U32 data;
+    rGPBCON = 0x155555;
+    data = 0x06;
+    while(1)
+    {
+        rGPBDAT = (data&lt;&lt;5);
+        dely(5000);
+        data =~data;
+    }
+}
+</code></pre>
+<h3 id="思考题">思考题</h3>
+<p><strong>如何实现四个LED灯轮流点亮</strong><br>
+只需依次将对应引脚电平拉低即可</p>
+<pre><code class="language-c">void LED_Test(void)
+{
+    U32 data;
+    rGPBCON = 0x15400; /*PB5~PB8 设置为输出*/
+    data = 0x01;
+    while (1)
+    {
+        rGPBDAT = ~(data &lt;&lt; 5);
+        dely(5000);
+        rGPBDAT = ~(data &lt;&lt; 6);
+        dely(5000);
+        rGPBDAT = ~(data &lt;&lt; 7);
+        dely(5000);
+        rGPBDAT = ~(data &lt;&lt; 8);
+        dely(5000);
+    }
+}
+</code></pre>
+<h2 id="实验三-中断控制">实验三 中断控制</h2>
+<h3 id="基本目标">基本目标</h3>
+<p><strong>按下任意按键都可以使LED开始闪烁</strong></p>
+<pre><code class="language-c">void eint_init(void)
+{
+    rGPGCON = rGPGCON &amp; (~((3 &lt;&lt; 22) | (3 &lt;&lt; 6) | (3 &lt;&lt; 0) |
+(3 &lt;&lt; 10) | (3 &lt;&lt; 12) | (3 &lt;&lt; 14))) | ((2 &lt;&lt; 22) | (2 &lt;&lt; 6) | (2 &lt;&lt; 0) |
+ (2 &lt;&lt; 10) | (2 &lt;&lt; 12) | (2 &lt;&lt; 14)); //GPG config as EINT
+
+	/* 低电平触发 */
+    rEXTINT1 &amp;= ~(7|(7&lt;&lt;0));
+    rEXTINT1 |= (0|(0&lt;&lt;0));//set eint8 low level int
+    rEXTINT1 &amp;= ~(7&lt;&lt;12);
+    rEXTINT1 |= (0&lt;&lt;12); //set eint11 low level int
+    rEXTINT1 &amp;= ~(7&lt;&lt;20);
+    rEXTINT1 |= (0&lt;&lt;20); //set eint13 low level int
+    rEXTINT1 &amp;= ~(7&lt;&lt;24);
+    rEXTINT1 |= (0&lt;&lt;24); //set eint14 low level int
+    rEXTINT1 &amp;= ~(7&lt;&lt;28);
+    rEXTINT1 |= (0&lt;&lt;28); //set eint15 low level int
+    rEXTINT2 &amp;= ~(0xf&lt;&lt;12);
+    rEXTINT2 |= (0&lt;&lt;12); //set eint19 low level int
+
+    rEINTPEND |= (1 &lt;&lt; 8) | (1 &lt;&lt; 11) | (1 &lt;&lt; 13) | 
+    (1 &lt;&lt; 14) | (1 &lt;&lt; 15) | (1 &lt;&lt; 19); //clear eint pending
+    rEINTMASK &amp;= ~((1 &lt;&lt; 8) | (1 &lt;&lt; 11) | (1 &lt;&lt; 13) |
+     (1 &lt;&lt; 14) | (1 &lt;&lt; 15) | (1 &lt;&lt; 19));
+    //enable eint
+    ClearPending(BIT_EINT8_23); //SRCPND INTPND
+    pISR_EINT8_23 = (U32)key_handler;
+    EnableIrq(BIT_EINT8_23); //INTMSK
+}
+void eint_test(void)
+{
+    rGPBCON = 0x155555;
+    eint_init();
+}
+static void __irq key_handler(void)
+{
+    U32 data;
+    data = 0x06;
+    if(rINTPND==BIT_EINT8_23) {
+        ClearPending(BIT_EINT8_23);
+        if(rEINTPEND&amp;(1&lt;&lt;8)) rEINTPEND |= 1&lt;&lt; 8;
+        if(rEINTPEND&amp;(1&lt;&lt;11)) rEINTPEND |= 1&lt;&lt; 11;
+        if(rEINTPEND&amp;(1&lt;&lt;13)) rEINTPEND |= 1&lt;&lt; 13;
+        if(rEINTPEND&amp;(1&lt;&lt;14)) rEINTPEND |= 1&lt;&lt; 14;
+        if(rEINTPEND&amp;(1&lt;&lt;15)) rEINTPEND |= 1&lt;&lt; 15;
+        if(rEINTPEND&amp;(1&lt;&lt;19)) rEINTPEND |= 1&lt;&lt; 19;
+    }
+    while(1)
+    {
+        rGPBDAT = (data&lt;&lt;5);
+        dely(10000);
+        data =~data;
+    }
+}
+</code></pre>
+<h3 id="思考题-2">思考题</h3>
+<p><strong>1.如果修改为上升沿触发按键中断，会有何实验现象？</strong><br>
+理论上说,改为上升沿触发,当松开按键时才会触发中断,使LED灯开始闪烁.然而我实际测试的时候,总是在按下按键的时候就触发了.通过在中断函数中打印日志发现,按键抖动非常严重,按下一次按键能触发三四次中断.所以实际效果并不好.</p>
+<pre><code class="language-c">/* 上升沿触发 */
+    /* 实际效果不理想,在中断函数打印日志,发现按下一次按钮
+    可以触发三四次中断,抖动太严重,顾不追求实际效果 */
+    rEXTINT1 &amp;= ~(7 &lt;&lt; 0); /* 清空 */
+    rEXTINT1 |= (4 &lt;&lt; 0);  //set eint8 rasing edge int
+    rEXTINT1 &amp;= ~(7 &lt;&lt; 12);
+    rEXTINT1 |= (4 &lt;&lt; 12); //set eint11 rasing edge int
+    rEXTINT1 &amp;= ~(7 &lt;&lt; 20);
+    rEXTINT1 |= (4 &lt;&lt; 20); //set eint13 rasing edge int
+    rEXTINT1 &amp;= ~(7 &lt;&lt; 24);
+    rEXTINT1 |= (4 &lt;&lt; 24); //set eint14 rasing edge int
+    rEXTINT1 &amp;= ~(7 &lt;&lt; 28);
+    rEXTINT1 |= (4 &lt;&lt; 28); //set eint15 rasing edge int
+    rEXTINT2 &amp;= ~(0xf &lt;&lt; 12);
+    rEXTINT2 |= (4 &lt;&lt; 12); //set eint19 rasing edge int
+</code></pre>
+<p><strong>2.如何实现不同按键中断有不同处理?</strong><br>
+通过读取rEINTPEND中的值,可以判断是哪一个中断被触发,可以由此写出如下中断服务函数,实现按下KEY1,KEY2,KEY3 慢速闪烁,按下KEY4,KEY5,KEY6快速闪烁 .</p>
+<pre><code class="language-c">static void __irq key_handler(void)
+{
+    U32 data;
+    data = 0x06;
+    int flag = 0;
+    /* 按下KEY1,KEY2,KEY3 慢速闪烁,按下KEY4,KEY5,KEY6快速闪烁 */
+    if (rINTPND == BIT_EINT8_23)
+    {
+        ClearPending(BIT_EINT8_23);
+        if (rEINTPEND &amp; (1 &lt;&lt; 8))
+        {
+            rEINTPEND |= 1 &lt;&lt; 8;
+            flag = 1;
+        }
+        if (rEINTPEND &amp; (1 &lt;&lt; 11))
+        {
+            rEINTPEND |= 1 &lt;&lt; 11;
+            flag = 1;
+        }
+        if (rEINTPEND &amp; (1 &lt;&lt; 13))
+        {
+            rEINTPEND |= 1 &lt;&lt; 13;
+            flag = 1;
+        }
+        if (rEINTPEND &amp; (1 &lt;&lt; 14))
+        {
+            rEINTPEND |= 1 &lt;&lt; 14;
+            flag = 2;
+        }
+        if (rEINTPEND &amp; (1 &lt;&lt; 15))
+        {
+            rEINTPEND |= 1 &lt;&lt; 15;
+            flag = 2;
+        }
+        if (rEINTPEND &amp; (1 &lt;&lt; 19))
+        {
+            rEINTPEND |= 1 &lt;&lt; 19;
+            flag = 2;
+        }
+    }
+    if (flag == 1)
+    {
+        while (1)
+        {
+            rGPBDAT = (data &lt;&lt; 5);
+            dely(10000);
+            data = ~data;
+        }
+    }
+    if (flag == 2)
+    {
+        while (1)
+        {
+            rGPBDAT = (data &lt;&lt; 5);
+            dely(1000);
+            data = ~data;
+        }
+    }
+
+#endif
+}
+</code></pre>
+<h2 id="实验四-定时器实验">实验四 定时器实验</h2>
+<h3 id="基本目标-2">基本目标</h3>
+<p>编程实现测试程序运行后过 5 秒开启 LED 跑马灯</p>
+<pre><code class="language-c">void timer0_init(void)
+{
+    /* PCLK为50M,定时器输入时钟设置为12500hz,定时器重装值
+    设置为12500,可以实现1s一次的中断 */
+    ClearPending(BIT_TIMER0); //SRCPND INTPND
+    pISR_TIMER0 = (U32)timer0_handler;
+    rTCFG0 &amp;= ~0xff;
+    rTCFG0 |= 249; //prescaler = 249+1
+    rTCFG1 &amp;= ~0xf;
+    rTCFG1 |= 3;     //mux = 1/16
+    rTCNTB0 = 12500; //定时器装载值12500
+    rTCON &amp;= ~0x1f;
+    rTCON |= 0x02;
+    rTCON = 0x09;          //启动定时器
+    EnableIrq(BIT_TIMER0); //INTMSK
+}
+
+volatile U8 timer_count = 0;
+
+void timer0_test(void)
+{
+    U32 data;
+    timer_count = 0;
+    rGPBCON = 0x155555;
+    data = 0x06;
+    timer0_init();
+
+    while(1)
+    {
+        /* 例程这里有错误,没有等timer_count的变化,
+        应该有while循环等待timer_count到达4 */
+        if (timer_count &gt;= 4)
+        {
+            while (1)
+            {
+                rGPBDAT = (data &lt;&lt; 5);
+                dely(120);
+                data = ~data;
+            }
+        }
+    }
+}
+static void __irq timer0_handler(void)
+{
+    timer_count++;
+    if (timer_count == 4)
+        rTCON = 0; //停止定时器
+    ClearPending(BIT_TIMER0); //SRCPND INTPND
+}
+</code></pre>
+<h3 id="思考题-3">思考题</h3>
+<p><strong>1、如何修改程序实现准确定时 5 秒？</strong><br>
+PCLK为50M,定时器输入时钟设置为12500hz,定时器重装值设置为12500,可以实现1s一次的中断.触发5次中断就是5s.</p>
+<pre><code class="language-c">void timer0_init(void)
+{
+    /* PCLK为50M,定时器输入时钟设置为12500hz,定时器重装值
+    设置为12500,可以实现1s一次的中断 */
+    ClearPending(BIT_TIMER0); //SRCPND INTPND
+    pISR_TIMER0 = (U32)timer0_handler;
+    rTCFG0 &amp;= ~0xff;
+    rTCFG0 |= 249; //prescaler = 249+1
+    rTCFG1 &amp;= ~0xf;
+    rTCFG1 |= 3;     //mux = 1/16
+    rTCNTB0 = 12500; //定时器装载值12500
+    rTCON &amp;= ~0x1f;
+    rTCON |= 0x02;
+    rTCON = 0x09;          //启动定时器
+    EnableIrq(BIT_TIMER0); //INTMSK
+}
+</code></pre>
+<p><strong>2、如何用定时器实现 LED 闪烁的准确定时?</strong><br>
+定义一个定时器延时函数</p>
+<pre><code class="language-c">void timer_delay_s(U32 t)
+{
+    /* 给定初始值,在中断中递减,减到0为止 */
+    timer_count = t;
+    timer0_init();
+    while (timer_count != 0) ;
+}
+static void __irq timer0_handler(void)
+{
+    if (timer_count != 0)
+        timer_count--;
+    else
+        rTCON = 0;            //停止定时器
+    ClearPending(BIT_TIMER0); //SRCPND INTPND
+}
+void timer0_test(void)
+{
+    U32 data;
+    timer_count = 0;
+    rGPBCON = 0x155555;
+    data = 0x06;
+    while (1)
+    {
+        /* 使用定时器让LED灯间隔1s精确闪烁 */
+        rGPBDAT = (data &lt;&lt; 5);
+        timer_delay_s(1);
+        data = ~data;
+    }
+}
+</code></pre>
+<h2 id="实验五-nand-flash实验">实验五 NAND FLASH实验</h2>
+<h3 id="基本目标-3">基本目标</h3>
+<p><strong>实现在NAND FLASH上数据的读取和写入</strong></p>
+<pre><code class="language-c">void nand_test(void)
+{
+    U16 ID,i;
+ 	U8  buf[2048];
+    char name[100] = &quot;chenhui&quot;; //自定义的数据
+	U32 NFBlockNO;
+   	U32 NFPagesNO;
+	U32 size=32;	   		//定义读写的大小
+   	U32 addr=0x000000;		//定义读写的地址
+
+ 	U32 status;
+ 	U32 BlockPages;
+ 	Uart_Printf(&quot;Nandflash Test.\n&quot;);
+ 	InitNandCfg();            						//初始化函数
+ 	ID=ReadChipId();								//ID 
+ 	Uart_Printf(&quot;Nandflash`s ID is:%x\n&quot;,ID);
+ 
+	NFBlockNO=(addr&amp;0x1ffc0000)&gt;&gt;18; 		//第几块
+	NFPagesNO=(addr&amp;0x0003f000)&gt;&gt;12;  		//第几页
+	BlockPages=addr&gt;&gt;12; 					//转化为总页数
+
+   	if(EraseBlock(BlockPages)&amp;0x1==TRUE)			
+       //因为EraseBlock()的输入参数是页数，所以输入的是BlockPages
+  	{  
+		Uart_Printf(&quot;address:%x  size:%d\n&quot;,addr,size);
+  		Uart_Printf(&quot;block %d is erased\n&quot;,NFBlockNO);		//打印擦除的是那一块
+  		Uart_Printf(&quot;\n\nwrite data:\n&quot;);
+  		for(i=0; i&lt;size; i++)
+  		{
+   			Uart_Printf(&quot;%c&quot;, name[i]);  
+      	}
+    
+       	status = WritePage(addr,size,name);			//写入数据 
+      
+      	if(status&amp;0x1==TRUE )						//返回成功值  
+        	Uart_Printf(&quot;\nWrite OK.\n&quot;);
+       	else  
+        	Uart_Printf(&quot;\nWrite Error.\n&quot;);
+       
+      	for(i=0; i&lt;size; i++)
+         	buf[i] = 1;				
+             //为验证后边数组中的数据是来自flash,实际上相当于是在数组中擦除了flash的数据，因为如果flash擦除时内容就全为1
+       
+      	ReadPage(addr,size,buf); 	//将读取的数据存入buf中
+      	Uart_Printf(&quot;\n\nRead data:\n&quot;);		//输出块号和页号
+      
+    	for(i=0; i&lt;size; i++)
+   		Uart_Printf(&quot;%c&quot;, buf[i]);	//打印所读取的数据
+  	}
+   
+ 	else
+  		Uart_Printf(&quot;\nblock %4x erased is bad\n&quot;,NFBlockNO); 				
+          //否则是坏块，并打印信息
+ 
+}
+</code></pre>
+<h3 id="思考题-4">思考题</h3>
+<p><strong>1. 简述ECC的使用方法</strong></p>
+<ol>
+<li>软件模式下，ECC 模块生成 ECC 奇偶校验码用于读/写数据。因此你可以写入 InitECC（NFCONT[4]）位为’1’.并在读或写数据之前清除 MainECCLock（NFCONT[5]）位为’0’（开锁）来复位 ECC 的值。MainECCLock（NFCONT[5]）和 SpareECCLock（NFCONT[6]）是控制是否生成 ECC 奇偶校验码。</li>
+<li>每当读取或写入数据时，ECC 模块将生成 ECC 奇偶校验码到寄存器 NFMECC0/1 中。</li>
+<li>当你完成了读或写一页以后（不包括备份区域数据），设置 MainECCLock 位为’1’（锁）。ECC 奇偶校验码被锁住并且 ECC 状态寄存器的值也将不会被改变。</li>
+<li>要生成备份区域 ECC 奇偶校验码，清除 SpareECCLock（NFCONT[6]）位为’0’（开锁）即可。</li>
+<li>每当读取或写入数据时，备份区域 ECC 模块生成 ECC 奇偶校验码到寄存器 NFSECC 中。</li>
+<li>当你完成了读或写备份区域后，设置 SpareECCLock 位为’1’（锁）。ECC 奇偶校验码被锁住并且 ECC 状态寄存器的值也将不会被改变。</li>
+<li>每完成一次你可以用这些值来标记备份区域或检查位错误。</li>
+</ol>
+<p><strong>2.请解释 NAND Flash 中存放的程序能否执行？</strong><br>
+不能直接执行,必须先读取到RAM中,才能执行,因为nand由于制作工艺的原因，不能像其他一些memory一样通过数据和地址线访问，而只能通过IO顺序访问，因此访问效率较低，但是其传输速度快，所以适合做大容量存储器，而相对来说Nor Flash适合做代码存储。</p>
+<p><strong>3、开发板中，NAND Flash 测试读写数据的地址至少是多少?</strong><br>
+若不是从NAND引导启动,可以从0x00000000开始读取,若从NAND引导启动,需往后推4kb.</p>
+<h2 id="实验六-触摸屏实验">实验六 触摸屏实验</h2>
+<h2 id="实验七-lcd实验">实验七 LCD实验</h2>
+<h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
+<h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
+<h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[[RCEA学习营]第1周]]></title>
         <id>https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/</id>
