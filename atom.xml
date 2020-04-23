@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-23T12:49:18.654Z</updated>
+    <updated>2020-04-23T13:24:57.167Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -11,12 +11,88 @@
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 博德工作室</rights>
     <entry>
+        <title type="html"><![CDATA[RT-Thread学习笔记（一）]]></title>
+        <id>https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/</id>
+        <link href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/">
+        </link>
+        <updated>2020-04-23T13:21:48.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>作者: 黄震</strong><br>
+本笔记内容基于RT-Thread官方<a href="https://www.rt-thread.org/document/site/">文档中心</a></p>
+<h2 id="什么是rt-thread">什么是RT-Thread</h2>
+<ol>
+<li>概述<br>
+一款完全由国内团队开发维护的嵌入式实时操作系统（RTOS）。正演变成一个功能强大、组件丰富的物联网操作系统</li>
+<li>架构<br>
+自下而上为
+<ul>
+<li>内核层： RT-Thread 的核心部分，包括了内核系统中对象的实现，例如多线程及其调度、信号量、邮箱、消息队列、内存管理、定时器等</li>
+<li>组件与服务层：组件是基于 RT-Thread 内核之上的上层软件，例如虚拟文件系统、FinSH 命令行界面、网络框架、设备框架等</li>
+<li>RT-Thread软件包：运行于 RT-Thread 物联网操作系统平台上，面向不同应用领域的通用软件组件，由描述信息、源代码或库文件组成</li>
+</ul>
+</li>
+<li>特点
+<ol>
+<li>采用 C 语言编写，浅显易懂，方便移植</li>
+<li>Nano版本专门针对低性能系统</li>
+<li>对比Linux体积小，成本低，功耗低</li>
+<li>有丰富的软件包依赖</li>
+</ol>
+</li>
+</ol>
+<h2 id="rt-thread-nano">RT-Thread Nano</h2>
+<pre><code>一个极简版的硬实时内核，功能包括任务处理、软件定时器、信号量、邮箱和实时调度等相对完整的实时操作系统特性。适用于各种32位ARM入门级MCU场合。
+有下载简单，代码简单，移植简单的特点。
+</code></pre>
+<h2 id="内核基础">内核基础</h2>
+<pre><code>与硬件密切相关的，实现操作系统基础的功能的程序
+</code></pre>
+<ol>
+<li>
+<p>内核功能</p>
+<ul>
+<li>线程调度</li>
+<li>时钟管理</li>
+<li>线程间同步</li>
+<li>线程间通信</li>
+<li>内存管理</li>
+<li>I/O设备管理</li>
+</ul>
+</li>
+<li>
+<p>RT-Thread 启动流程<br>
+由系统启动文件开始进入RT-Thread启动文件rtthread_startup()后进入用户的main()函数<br>
+<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_1">官方文档</a></p>
+</li>
+<li>
+<p>自动化初始机制<br>
+自动初始化机制是指初始化函数不需要被显式调用，只需要在函数定义处通过宏定义的方式进行申明，就会在系统启动过程中被执行<br>
+个人理解就是将一系列初始化函数集成在一个大的函数表中，系统开始时自动遍历表中函数并运行</p>
+<p><a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_3">官方文档</a></p>
+</li>
+<li>
+<p>内核对象管理</p>
+<p>具体内核对象结构体参考等<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_3">官方文档</a></p>
+<ul>
+<li>所有内核对象分为静态对象与动态对象，动态对象参数多为指针，命名由_t结尾</li>
+<li>常见对象有线程，信号量，互斥量，定时器等</li>
+</ul>
+</li>
+<li>
+<p>内核配置</p>
+<p>通过修改工程目录下的 rtconfig.h实现</p>
+<p>具体配置见<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_5">官方文档</a></p>
+</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[[嵌入式系统]mini2440课程实验]]></title>
         <id>https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/</id>
         <link href="https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/">
         </link>
         <updated>2020-04-23T10:54:13.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="实验一-开发板学习和程序下载">实验一 开发板学习和程序下载.</h2>
+        <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
+<h2 id="实验一-开发板学习和程序下载">实验一 开发板学习和程序下载.</h2>
 <p>指导书中推荐的开发环境是ADS,由于本人习惯使用KEIL,所以将原工程移植到了keil,主要是修改了启动文件中一些编译器相关的宏定义.一些是ads中独有的,keil下编译会报错.<br>
 <img src="https://baldstudio.cn/post-images/1587639557783.png" alt="搭建好的开发环境" loading="lazy"><br>
 开发的大致步骤是</p>
@@ -622,7 +698,8 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
         <link href="https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/">
         </link>
         <updated>2020-04-20T10:06:52.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="需要掌握的内容">需要掌握的内容</h3>
+        <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
+<h3 id="需要掌握的内容">需要掌握的内容</h3>
 <p>第一周主要任务是内核，使用到了RT-Thread simulator压缩包，还没用到ds18b20和esp8266。还没硬件的小伙伴们要赶快啦，后面就要用上了。</p>
 <p>以下整理了第一周学习需要掌握的<strong>5项</strong>内容，以及相关的学习文档/视频链接，内容较多但还算比较基础，推荐大家每天完成一项内容（根据经验，每次学习都会有部分人很积极且效率贼高，所以”每天完成一项“只是做个推荐而不强制，完成的早那就更好了），记得为自己预留做作业的时间。</p>
 <ul>
@@ -868,7 +945,8 @@ MSH_CMD_EXPORT(led_sem_test,led_sem_test);
         <link href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
         </link>
         <updated>2020-04-14T08:59:26.000Z</updated>
-        <content type="html"><![CDATA[<p>学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。</p>
+        <content type="html"><![CDATA[<p><strong>作者: 许威</strong><br>
+学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。</p>
 <h3 id="主要部件">主要部件</h3>
 <ul>
 <li>
@@ -1164,7 +1242,8 @@ void TIMERA_init()
         <link href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
         </link>
         <updated>2020-04-13T14:49:14.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="简单介绍">简单介绍</h2>
+        <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
+<h2 id="简单介绍">简单介绍</h2>
 <p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
 我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
 <img src="https://baldstudio.cn/post-images/1586789929216.jpg" alt="" loading="lazy"></p>
@@ -1381,7 +1460,8 @@ MSH_CMD_EXPORT(key_photo, key photo);
         <link href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
         </link>
         <updated>2020-04-10T08:01:02.000Z</updated>
-        <content type="html"><![CDATA[<p>RT-Thread的FinSH组件提供了适用于嵌入式的类Unix终端,非常好用,但一直以来缺少类似其他平台下的clear命令.无法清空当前屏幕.于是提交了一个PR,为FinSH组件增加clear命令</p>
+        <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong><br>
+RT-Thread的FinSH组件提供了适用于嵌入式的类Unix终端,非常好用,但一直以来缺少类似其他平台下的clear命令.无法清空当前屏幕.于是提交了一个PR,为FinSH组件增加clear命令</p>
 <h2 id="新增代码">新增代码</h2>
 <pre><code class="language-c">long clear(void)
 {
