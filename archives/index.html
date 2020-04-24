@@ -1,161 +1,212 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>学习小组</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587708227132">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587731290109">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="学习小组 - Atom Feed" href="https://baldstudio.cn/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
 
 
 
-    <meta name="description" content="Keep Foolish, Keep Hungry" />
-  </head>
-  <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587708227132" alt="">
-  </a>
-  <h1 class="site-title">
-    学习小组
-  </h1>
-  <p class="site-description">
-    Keep Foolish, Keep Hungry
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            学习小组
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
 
-    
         
 
 <div class="archives-container">
-  
-    <h2 class="year">2020</h2>
     
-      
-        <a href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang/" class="post">
-          <h2 class="post-title">
-            RT-Thread学习笔记（二）内核对象
-          </h2>
-          <div class="time">2020-04-24</div>
-        </a>
-      
+        <h2 class="year gt-c-cotent-color-first">2020</h2>
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-24&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            RT-Thread学习笔记（二）内核对象
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-23&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            RT-Thread学习笔记（一）
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-23&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            [嵌入式系统]mini2440课程实验
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-20&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            [RCEA学习营]第1周
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-14&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            MSP430G2553学习笔记：入门😁
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-13&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            [麻雀一号]垃圾分类助手开发历程
+                        </div>
+                    </a>
+                </article>
+            
+        
+            
+                <article class="post">
+                    <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
+                        <div class="post-title gt-c-content-color-first">
+                            <small><b>2020-04-10&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
+                            成功为RT-Thread主线贡献代码😁
+                        </div>
+                    </a>
+                </article>
+            
+        
     
-      
-        <a href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/" class="post">
-          <h2 class="post-title">
-            RT-Thread学习笔记（一）
-          </h2>
-          <div class="time">2020-04-23</div>
-        </a>
-      
-    
-      
-        <a href="https://baldstudio.cn/post/qian-ru-shi-xi-tong-mini2440-ke-cheng-shi-yan/" class="post">
-          <h2 class="post-title">
-            [嵌入式系统]mini2440课程实验
-          </h2>
-          <div class="time">2020-04-23</div>
-        </a>
-      
-    
-      
-        <a href="https://baldstudio.cn/post/rcea-xue-xi-ying-di-1-zhou/" class="post">
-          <h2 class="post-title">
-            [RCEA学习营]第1周
-          </h2>
-          <div class="time">2020-04-20</div>
-        </a>
-      
-    
-      
-        <a href="https://baldstudio.cn/post/msp430g2553-xue-xi-bi-ji-ru-men/" class="post">
-          <h2 class="post-title">
-            MSP430G2553学习笔记：入门😁
-          </h2>
-          <div class="time">2020-04-14</div>
-        </a>
-      
-    
-      
-        <a href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/" class="post">
-          <h2 class="post-title">
-            [麻雀一号]垃圾分类助手开发历程
-          </h2>
-          <div class="time">2020-04-13</div>
-        </a>
-      
-    
-      
-        <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/" class="post">
-          <h2 class="post-title">
-            成功为RT-Thread主线贡献代码😁
-          </h2>
-          <div class="time">2020-04-10</div>
-        </a>
-      
-    
-  
 </div>
 
-    
         <div class="pagination-container">
-  
-  
-</div>
-
     
-        <div class="site-footer">
-  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
-  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+    
 </div>
 
-      </div>
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Keep Foolish, Keep Hungry</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
     </div>
-  </body>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
 </html>

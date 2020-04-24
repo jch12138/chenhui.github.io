@@ -1,115 +1,106 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>MSP430G2553学习笔记：入门😁 | 学习小组</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587708227132">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587731290109">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="MSP430G2553学习笔记：入门😁 | 学习小组 - Atom Feed" href="https://baldstudio.cn/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
 
 
 
-    <meta name="description" content="作者: 许威
-学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。
-主要部件
-
-
-MSP430G2553 开发板
-
-
-LCD1602显示器
-
-
-
-线路连接
-
-
-查看LCD1602的使用手册的接..." />
-    <meta name="keywords" content="单片机" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  </head>
-  <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587708227132" alt="">
-  </a>
-  <h1 class="site-title">
-    学习小组
-  </h1>
-  <p class="site-description">
-    Keep Foolish, Keep Hungry
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              MSP430G2553学习笔记：入门😁
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-04-14
-              </span>
-              <span>
-                6 min read
-              </span>
-              
-                <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tag">
-                  # 单片机
-                </a>
-              
-            </div>
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            学习小组
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
             
-              <img class="post-feature-image" src="https://baldstudio.cn/post-images/msp430g2553-xue-xi-bi-ji-ru-men.jpg" alt="">
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p><strong>作者: 许威</strong><br>
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    MSP430G2553学习笔记：入门😁
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-14 ·
+                    </time>
+                    
+                        <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tags">
+                            # 单片机
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><strong>作者: 许威</strong><br>
 学校的单片机课程选用了MSP430G2553，上了几节课有了一定的了解，于是就打算简单的来入门一下。</p>
 <h3 id="主要部件">主要部件</h3>
 <ul>
@@ -399,98 +390,54 @@ void TIMERA_init()
   }
 </code></pre>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#%E4%B8%BB%E8%A6%81%E9%83%A8%E4%BB%B6">主要部件</a></li>
-<li><a href="#%E7%BA%BF%E8%B7%AF%E8%BF%9E%E6%8E%A5">线路连接</a>
-<ul>
-<li><a href="#%E6%9F%A5%E7%9C%8Blcd1602%E7%9A%84%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%E7%9A%84%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E">查看LCD1602的使用手册的接口说明</a></li>
-<li><a href="#%E5%85%B7%E4%BD%93%E6%8E%A5%E7%BA%BF">具体接线</a></li>
-<li><a href="#%E5%AE%9E%E7%89%A9%E5%9B%BE">实物图</a></li>
-</ul>
-</li>
-<li><a href="#%E7%82%B9%E4%BA%AElcd%E6%98%BE%E7%A4%BA%E5%86%85%E5%AE%B9">点亮LCD：显示内容</a></li>
-<li><a href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E8%AE%A1%E6%97%B6">定时器：计时</a></li>
-<li><a href="#%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C">最终结果</a></li>
-<li><a href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81">完整代码</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
-            </div>
-          </article>
+                </div>
+            </article>
         </div>
 
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/">
-              <h3 class="post-title">
-                [麻雀一号]垃圾分类助手开发历程
-              </h3>
-            </a>
-          </div>
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://baldstudio.cn/post/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng/" class="post-title gt-a-link">
+                    [麻雀一号]垃圾分类助手开发历程
+                </a>
+            </div>
         
 
         
+		
+		
 
-        <div class="site-footer">
-  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
-  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Keep Foolish, Keep Hungry</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a></a>
+    </div>
 </div>
 
-      </div>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
     </div>
-
-    <script>
-      hljs.initHighlightingOnLoad()
-
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
-
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
-
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
-
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
-
-    </script>
-  </body>
+</div>
+</body>
 </html>

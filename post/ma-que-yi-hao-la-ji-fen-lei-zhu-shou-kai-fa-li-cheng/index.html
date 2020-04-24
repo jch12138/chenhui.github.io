@@ -1,102 +1,106 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>[麻雀一号]垃圾分类助手开发历程 | 学习小组</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587708227132">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587731290109">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="[麻雀一号]垃圾分类助手开发历程 | 学习小组 - Atom Feed" href="https://baldstudio.cn/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
 
 
 
-    <meta name="description" content="作者: 蒋晨辉
-简单介绍
-最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会..." />
-    <meta name="keywords" content="单片机" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-  </head>
-  <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587708227132" alt="">
-  </a>
-  <h1 class="site-title">
-    学习小组
-  </h1>
-  <p class="site-description">
-    Keep Foolish, Keep Hungry
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              [麻雀一号]垃圾分类助手开发历程
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-04-13
-              </span>
-              <span>
-                10 min read
-              </span>
-              
-                <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tag">
-                  # 单片机
-                </a>
-              
-            </div>
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            学习小组
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
             
-              <img class="post-feature-image" src="https://baldstudio.cn/post-images/ma-que-yi-hao-la-ji-fen-lei-zhu-shou-kai-fa-li-cheng.jpg" alt="">
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p><strong>作者: 蒋晨辉</strong></p>
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    [麻雀一号]垃圾分类助手开发历程
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-04-13 ·
+                    </time>
+                    
+                        <a href="https://baldstudio.cn/tag/tIHJO5Wum/" class="post-tags">
+                            # 单片机
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p><strong>作者: 蒋晨辉</strong></p>
 <h2 id="简单介绍">简单介绍</h2>
 <p>最近参加了RT-Thread应用创新设计大赛,可以白嫖开发板,拿名次还有奖金,抱着刷履历和白嫖开发板的心情,我报了这个比赛.项目最终定为垃圾分类助手,大致功能是按下按键,摄像头拍照,将照片发送到云端进行识别,云端会把识别结果转成语音,返回给开发板,然后开发板播放识别结果.<br>
 我申请的是麻雀一号开发板,下面简单介绍一下这块开发板<br>
@@ -307,89 +311,54 @@ MSH_CMD_EXPORT(key_photo, key photo);
 <h2 id="总结">总结</h2>
 <p>通过大约一礼拜的开发,总算是完成了这个项目,如果是在PC上开发,使用高级语言,我想一个下午就能搞定,在嵌入式设备上进行调试费时费力,更加考验你对细节的把握.比如在调用api时,Python里不用关心参数的编码,在c里要自己掌控每个环节.这次使用rtthread,对于内存的使用理解更深了,学会了使用malloc,不再像以前只会使用静态数组了.学会如何节省内存,如何选择内存池.更好的分配内存,提高系统运行效率.</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D">简单介绍</a></li>
-<li><a href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8">如何使用</a></li>
-<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%9B%E5%BA%A6">开发进度</a></li>
-<li><a href="#%E8%81%94%E5%90%88%E8%B0%83%E8%AF%95">联合调试</a></li>
-<li><a href="#%E6%BC%94%E7%A4%BA%E6%95%88%E6%9E%9C">演示效果</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%9C%B0%E5%9D%80">代码地址</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
-            </div>
-          </article>
+                </div>
+            </article>
         </div>
 
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/">
-              <h3 class="post-title">
-                成功为RT-Thread主线贡献代码😁
-              </h3>
-            </a>
-          </div>
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://baldstudio.cn/post/cheng-gong-wei-rt-thread-zhu-xian-gong-xian-dai-ma/" class="post-title gt-a-link">
+                    成功为RT-Thread主线贡献代码😁
+                </a>
+            </div>
         
 
         
+		
+		
 
-        <div class="site-footer">
-  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
-  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Keep Foolish, Keep Hungry</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://baldstudio.cn/atom.xml" target="_blank">RSS</a></a>
+    </div>
 </div>
 
-      </div>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
     </div>
-
-    <script>
-      hljs.initHighlightingOnLoad()
-
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
-
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
-
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
-
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
-
-    </script>
-  </body>
+</div>
+</body>
 </html>
