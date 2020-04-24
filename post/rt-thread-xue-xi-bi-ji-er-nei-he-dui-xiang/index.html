@@ -1,0 +1,300 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RT-Thread学习笔记（二）内核对象 | 博德工作室</title>
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587701770456">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="RT-Thread学习笔记（二）内核对象 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="作者: 黄震
+本笔记基于官方文档书写
+
+内容涉及线程(Thread),时钟(Timer),进程间通信（IPC,包括信号量、互斥量、邮件，队列），内存，与中断
+官方文档中对每个部分的实例代码都可在此处的工程中kernel-sample文件夹中..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://baldstudio.cn">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587701770456" alt="">
+  </a>
+  <h1 class="site-title">
+    博德工作室
+  </h1>
+  <p class="site-description">
+    Keep Foolish, Keep Hungry
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              RT-Thread学习笔记（二）内核对象
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-24
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://baldstudio.cn/post-images/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p><strong>作者: 黄震</strong><br>
+本笔记基于<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_1">官方文档</a>书写</p>
+<ul>
+<li>内容涉及线程(Thread),时钟(Timer),进程间通信（IPC,包括信号量、互斥量、邮件，队列），内存，与中断</li>
+<li>官方文档中对每个部分的实例代码都可在<a href="https://www.rt-thread.org/document/site/tutorial/quick-start/stm32f103-simulator/stm32f103-simulator/">此处</a>的工程中kernel-sample文件夹中找到，可快速模拟运行</li>
+<li>带超链接的标题可直接点击进入官方文档，一些具体的定义将不再重复阐述</li>
+</ul>
+<h2 id="线程"><a href="https://www.rt-thread.org/document/site/programming-manual/thread/thread/">线程</a></h2>
+<pre><code>我所理解的线程就是一个个执行任务的小程序，根据优先级和抢占时间分别占用处理器
+线程执行时需要运行环境，称为上下文，具体来说就是各个变量和数据，包括所有的寄存器变量、堆栈、内存信息
+</code></pre>
+<h3 id="线程的管理方式">线程的管理方式</h3>
+<pre><code>抢占式，优先级高的先运行，优先级低的被挂起，优先级相同则按时间片属性轮流运行
+</code></pre>
+<h3 id="线程工作机制">线程工作机制</h3>
+<h4 id="线程控制块">线程控制块</h4>
+<pre><code>见官方文档
+</code></pre>
+<h4 id="重要属性">重要属性</h4>
+<h4 id="线程栈">线程栈</h4>
+<pre><code>用于保持线程切换时的上下文信息，有入口函数（PC 寄存器）、入口参数（R0 寄存器）、返回位置（LR 寄存器）、当前机器运行状态（CPSR 寄存器）值得关注
+</code></pre>
+<h4 id="线程状态">线程状态</h4>
+<pre><code>分初始、就绪、运行、挂起、关闭状态，便于线程管理
+实际上就绪状态和运行状态是等同的
+</code></pre>
+<h4 id="优先级">优先级</h4>
+<pre><code>决定线程被调度的优先级，RT-Thread最大支持256个优先级，0为最高
+</code></pre>
+<h4 id="时间片">时间片</h4>
+<pre><code>时间片仅对优先级相同的就绪态线程有效。单位是一个系统节拍。
+同优先级线程独占处理器的时间与时间片成正比例关系
+</code></pre>
+<h4 id="入口函数">入口函数</h4>
+<pre><code>实现线程的具体功能，及完成你想让线程完成的事
+</code></pre>
+<h4 id="线程错误码">线程错误码</h4>
+<pre><code>类型见文档
+</code></pre>
+<h4 id="线程状态切换">线程状态切换</h4>
+<pre><code>通过一系列函数实现
+1. rt_thread_create/init() 进入到初始状态
+2. rt_thread_startup() 进入到就绪状态
+3. 就绪状态的线程被调度器调度后进入运行状态
+4. 当处于运行状态的线程调用 rt_thread_delay()，rt_sem_take()，rt_mutex_take()，rt_mb_recv() 等函数或者获取不到资源时，将进入到挂起状态
+5. 处于挂起状态的线程，如果等待超时依然未能获得资源或由于其他线程释放了资源，那么它将返回到就绪状态
+6. 挂起状态的线程rt_thread_delete/detach() 函数，将更改为关闭状态
+7. 运行状态的线程，如果运行结束，就会在线程的最后部分执行 rt_thread_exit() 函数，将状态更改为关闭状态
+</code></pre>
+<h3 id="线程的管理">线程的管理</h3>
+<ul>
+<li>分为动态线程和静态线程的管理，两种不同类型的线程对应不同的管理函数</li>
+<li>具体的函数说明都可在<a href="https://www.rt-thread.org/document/site/programming-manual/thread/thread/#_16">官方文档</a>中可自行查阅</li>
+<li>在此仅罗列一些特点，方便理解，这些特点广泛使用于内核对象，在以后的内容中不再阐述
+<ol>
+<li>动态对象定义中多为指针,且函数名以’_t‘结尾</li>
+<li>动态对象的创建删除对应后缀为“creat”,'delete',静态的为“init”,'detach'</li>
+</ol>
+</li>
+</ul>
+<h2 id="时钟"><a href="https://www.rt-thread.org/document/site/programming-manual/timer/timer/">时钟</a></h2>
+<ul>
+<li>该部分十分简单，官方文档十分容易理解</li>
+<li>注意硬件定时器与软件定时器的区别<br>
+硬件定时器以中断方式实现定时，软件定时器由操作系统提供，时钟节拍（OS Tick）的时间长度为单位</li>
+<li>值得一提的是高精度延时的方法</li>
+</ul>
+<h2 id="线程间同步"><a href="https://www.rt-thread.org/document/site/programming-manual/ipc1/ipc1/">线程间同步</a></h2>
+<pre><code>详细内容见文档应思考如下问题
+1.信号量，互斥量对共有资源的占用特点
+2.事件集的触发方式
+</code></pre>
+<h2 id="线程间通信"><a href="https://www.rt-thread.org/document/site/programming-manual/ipc2/ipc2/">线程间通信</a></h2>
+<h3 id="邮箱">邮箱</h3>
+<ul>
+<li>4K大小，数据过大用指针传</li>
+</ul>
+<h3 id="消息队列">消息队列</h3>
+<ul>
+<li>邮箱的扩展</li>
+<li>FIFO原则传递信息</li>
+</ul>
+<h3 id="信号">信号</h3>
+<ul>
+<li>本质是软中断</li>
+<li>进程安装信号后，在接受到信号后，执行信号指定的信号中断函数</li>
+</ul>
+<h2 id="内存管理"><a href="https://www.rt-thread.org/document/site/programming-manual/memory/memory/">内存管理</a></h2>
+<pre><code>了解三种内存管理模式与特点
+小内存管理算法，slab管理算法，menheap管理算法
+</code></pre>
+<h2 id="中断管理"><a href="https://www.rt-thread.org/document/site/programming-manual/interrupt/interrupt/">中断管理</a></h2>
+<pre><code>见文档
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E7%BA%BF%E7%A8%8B">线程</a>
+<ul>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F">线程的管理方式</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6">线程工作机制</a>
+<ul>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%9D%97">线程控制块</a></li>
+<li><a href="#%E9%87%8D%E8%A6%81%E5%B1%9E%E6%80%A7">重要属性</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E6%A0%88">线程栈</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81">线程状态</a></li>
+<li><a href="#%E4%BC%98%E5%85%88%E7%BA%A7">优先级</a></li>
+<li><a href="#%E6%97%B6%E9%97%B4%E7%89%87">时间片</a></li>
+<li><a href="#%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0">入口函数</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E9%94%99%E8%AF%AF%E7%A0%81">线程错误码</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%88%87%E6%8D%A2">线程状态切换</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%AE%A1%E7%90%86">线程的管理</a></li>
+</ul>
+</li>
+<li><a href="#%E6%97%B6%E9%92%9F">时钟</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E5%90%8C%E6%AD%A5">线程间同步</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1">线程间通信</a>
+<ul>
+<li><a href="#%E9%82%AE%E7%AE%B1">邮箱</a></li>
+<li><a href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">消息队列</a></li>
+<li><a href="#%E4%BF%A1%E5%8F%B7">信号</a></li>
+</ul>
+</li>
+<li><a href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86">内存管理</a></li>
+<li><a href="#%E4%B8%AD%E6%96%AD%E7%AE%A1%E7%90%86">中断管理</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/">
+              <h3 class="post-title">
+                RT-Thread学习笔记（一）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/jch2138" target="_blank">BalDStudio</a>
+  <a class="rss" href="https://baldstudio.cn/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>博德工作室</title>
-    <updated>2020-04-23T13:38:16.138Z</updated>
+    <updated>2020-04-24T04:16:13.955Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -10,6 +10,108 @@
     <logo>https://baldstudio.cn/images/avatar.png</logo>
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 博德工作室</rights>
+    <entry>
+        <title type="html"><![CDATA[RT-Thread学习笔记（二）内核对象]]></title>
+        <id>https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang/</id>
+        <link href="https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang/">
+        </link>
+        <updated>2020-04-24T04:15:30.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>作者: 黄震</strong><br>
+本笔记基于<a href="https://www.rt-thread.org/document/site/programming-manual/basic/basic/#rt-thread_1">官方文档</a>书写</p>
+<ul>
+<li>内容涉及线程(Thread),时钟(Timer),进程间通信（IPC,包括信号量、互斥量、邮件，队列），内存，与中断</li>
+<li>官方文档中对每个部分的实例代码都可在<a href="https://www.rt-thread.org/document/site/tutorial/quick-start/stm32f103-simulator/stm32f103-simulator/">此处</a>的工程中kernel-sample文件夹中找到，可快速模拟运行</li>
+<li>带超链接的标题可直接点击进入官方文档，一些具体的定义将不再重复阐述</li>
+</ul>
+<h2 id="线程"><a href="https://www.rt-thread.org/document/site/programming-manual/thread/thread/">线程</a></h2>
+<pre><code>我所理解的线程就是一个个执行任务的小程序，根据优先级和抢占时间分别占用处理器
+线程执行时需要运行环境，称为上下文，具体来说就是各个变量和数据，包括所有的寄存器变量、堆栈、内存信息
+</code></pre>
+<h3 id="线程的管理方式">线程的管理方式</h3>
+<pre><code>抢占式，优先级高的先运行，优先级低的被挂起，优先级相同则按时间片属性轮流运行
+</code></pre>
+<h3 id="线程工作机制">线程工作机制</h3>
+<h4 id="线程控制块">线程控制块</h4>
+<pre><code>见官方文档
+</code></pre>
+<h4 id="重要属性">重要属性</h4>
+<h4 id="线程栈">线程栈</h4>
+<pre><code>用于保持线程切换时的上下文信息，有入口函数（PC 寄存器）、入口参数（R0 寄存器）、返回位置（LR 寄存器）、当前机器运行状态（CPSR 寄存器）值得关注
+</code></pre>
+<h4 id="线程状态">线程状态</h4>
+<pre><code>分初始、就绪、运行、挂起、关闭状态，便于线程管理
+实际上就绪状态和运行状态是等同的
+</code></pre>
+<h4 id="优先级">优先级</h4>
+<pre><code>决定线程被调度的优先级，RT-Thread最大支持256个优先级，0为最高
+</code></pre>
+<h4 id="时间片">时间片</h4>
+<pre><code>时间片仅对优先级相同的就绪态线程有效。单位是一个系统节拍。
+同优先级线程独占处理器的时间与时间片成正比例关系
+</code></pre>
+<h4 id="入口函数">入口函数</h4>
+<pre><code>实现线程的具体功能，及完成你想让线程完成的事
+</code></pre>
+<h4 id="线程错误码">线程错误码</h4>
+<pre><code>类型见文档
+</code></pre>
+<h4 id="线程状态切换">线程状态切换</h4>
+<pre><code>通过一系列函数实现
+1. rt_thread_create/init() 进入到初始状态
+2. rt_thread_startup() 进入到就绪状态
+3. 就绪状态的线程被调度器调度后进入运行状态
+4. 当处于运行状态的线程调用 rt_thread_delay()，rt_sem_take()，rt_mutex_take()，rt_mb_recv() 等函数或者获取不到资源时，将进入到挂起状态
+5. 处于挂起状态的线程，如果等待超时依然未能获得资源或由于其他线程释放了资源，那么它将返回到就绪状态
+6. 挂起状态的线程rt_thread_delete/detach() 函数，将更改为关闭状态
+7. 运行状态的线程，如果运行结束，就会在线程的最后部分执行 rt_thread_exit() 函数，将状态更改为关闭状态
+</code></pre>
+<h3 id="线程的管理">线程的管理</h3>
+<ul>
+<li>分为动态线程和静态线程的管理，两种不同类型的线程对应不同的管理函数</li>
+<li>具体的函数说明都可在<a href="https://www.rt-thread.org/document/site/programming-manual/thread/thread/#_16">官方文档</a>中可自行查阅</li>
+<li>在此仅罗列一些特点，方便理解，这些特点广泛使用于内核对象，在以后的内容中不再阐述
+<ol>
+<li>动态对象定义中多为指针,且函数名以’_t‘结尾</li>
+<li>动态对象的创建删除对应后缀为“creat”,'delete',静态的为“init”,'detach'</li>
+</ol>
+</li>
+</ul>
+<h2 id="时钟"><a href="https://www.rt-thread.org/document/site/programming-manual/timer/timer/">时钟</a></h2>
+<ul>
+<li>该部分十分简单，官方文档十分容易理解</li>
+<li>注意硬件定时器与软件定时器的区别<br>
+硬件定时器以中断方式实现定时，软件定时器由操作系统提供，时钟节拍（OS Tick）的时间长度为单位</li>
+<li>值得一提的是高精度延时的方法</li>
+</ul>
+<h2 id="线程间同步"><a href="https://www.rt-thread.org/document/site/programming-manual/ipc1/ipc1/">线程间同步</a></h2>
+<pre><code>详细内容见文档应思考如下问题
+1.信号量，互斥量对共有资源的占用特点
+2.事件集的触发方式
+</code></pre>
+<h2 id="线程间通信"><a href="https://www.rt-thread.org/document/site/programming-manual/ipc2/ipc2/">线程间通信</a></h2>
+<h3 id="邮箱">邮箱</h3>
+<ul>
+<li>4K大小，数据过大用指针传</li>
+</ul>
+<h3 id="消息队列">消息队列</h3>
+<ul>
+<li>邮箱的扩展</li>
+<li>FIFO原则传递信息</li>
+</ul>
+<h3 id="信号">信号</h3>
+<ul>
+<li>本质是软中断</li>
+<li>进程安装信号后，在接受到信号后，执行信号指定的信号中断函数</li>
+</ul>
+<h2 id="内存管理"><a href="https://www.rt-thread.org/document/site/programming-manual/memory/memory/">内存管理</a></h2>
+<pre><code>了解三种内存管理模式与特点
+小内存管理算法，slab管理算法，menheap管理算法
+</code></pre>
+<h2 id="中断管理"><a href="https://www.rt-thread.org/document/site/programming-manual/interrupt/interrupt/">中断管理</a></h2>
+<pre><code>见文档
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[RT-Thread学习笔记（一）]]></title>
         <id>https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-yi/</id>
@@ -688,7 +790,29 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <h3 id="实验效果-6">实验效果</h3>
 <figure data-type="image" tabindex="6"><img src="https://baldstudio.cn/post-images/1587645032803.jpg" alt="" loading="lazy"></figure>
 <h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
+<h3 id="基本目标-6">基本目标</h3>
+<ol>
+<li>安装linux操作系统<br>
+<img src="https://baldstudio.cn/post-images/1587697136338.png" alt="" loading="lazy"></li>
+<li>熟悉基本命令的使用<br>
+<img src="https://baldstudio.cn/post-images/1587697440217.png" alt="" loading="lazy"></li>
+<li>使用minicom<br>
+<img src="https://baldstudio.cn/post-images/1587697890918.png" alt="" loading="lazy"></li>
+</ol>
 <h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
+<h3 id="基本目标-7">基本目标</h3>
+<p><strong>1、配置并编译内核源码包</strong><br>
+<img src="https://baldstudio.cn/post-images/1587696192061.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696200076.png" alt="" loading="lazy"><br>
+<strong>2、下载内核镜像到开发板</strong><br>
+<img src="https://baldstudio.cn/post-images/1587696274281.png" alt="" loading="lazy"><br>
+###思考题<br>
+<strong>如何在内核配置项中增加一个选项?</strong><br>
+在KConfig中添加菜单项,保存之后再进入menuconfig即可看到新增加的选项.</p>
+<h3 id="实验效果-7">实验效果</h3>
+<p><img src="https://baldstudio.cn/post-images/1587696562337.jpg" alt="正常进入系统" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696597292.png" alt="内核启动" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696630159.png" alt="" loading="lazy"></p>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
 ]]></content>
     </entry>

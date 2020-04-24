@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[嵌入式系统]mini2440课程实验 | 博德工作室</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587649088655">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587701770456">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="[嵌入式系统]mini2440课程实验 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
@@ -25,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587649088655" alt="">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587701770456" alt="">
   </a>
   <h1 class="site-title">
     博德工作室
@@ -85,7 +85,7 @@
                 2020-04-23
               </span>
               <span>
-                19 min read
+                20 min read
               </span>
               
             </div>
@@ -691,7 +691,29 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <h3 id="实验效果-6">实验效果</h3>
 <figure data-type="image" tabindex="6"><img src="https://baldstudio.cn/post-images/1587645032803.jpg" alt="" loading="lazy"></figure>
 <h2 id="实验八-linux操作与串口通信">实验八 Linux操作与串口通信</h2>
+<h3 id="基本目标-6">基本目标</h3>
+<ol>
+<li>安装linux操作系统<br>
+<img src="https://baldstudio.cn/post-images/1587697136338.png" alt="" loading="lazy"></li>
+<li>熟悉基本命令的使用<br>
+<img src="https://baldstudio.cn/post-images/1587697440217.png" alt="" loading="lazy"></li>
+<li>使用minicom<br>
+<img src="https://baldstudio.cn/post-images/1587697890918.png" alt="" loading="lazy"></li>
+</ol>
 <h2 id="实验九-操作系统裁剪与移植">实验九 操作系统裁剪与移植</h2>
+<h3 id="基本目标-7">基本目标</h3>
+<p><strong>1、配置并编译内核源码包</strong><br>
+<img src="https://baldstudio.cn/post-images/1587696192061.png" alt="" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696200076.png" alt="" loading="lazy"><br>
+<strong>2、下载内核镜像到开发板</strong><br>
+<img src="https://baldstudio.cn/post-images/1587696274281.png" alt="" loading="lazy"><br>
+###思考题<br>
+<strong>如何在内核配置项中增加一个选项?</strong><br>
+在KConfig中添加菜单项,保存之后再进入menuconfig即可看到新增加的选项.</p>
+<h3 id="实验效果-7">实验效果</h3>
+<p><img src="https://baldstudio.cn/post-images/1587696562337.jpg" alt="正常进入系统" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696597292.png" alt="内核启动" loading="lazy"><br>
+<img src="https://baldstudio.cn/post-images/1587696630159.png" alt="" loading="lazy"></p>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
 
               </div>
@@ -742,8 +764,17 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <li><a href="#%E5%AE%9E%E9%AA%8C%E6%95%88%E6%9E%9C-6">实验效果</a></li>
 </ul>
 </li>
-<li><a href="#%E5%AE%9E%E9%AA%8C%E5%85%AB-linux%E6%93%8D%E4%BD%9C%E4%B8%8E%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1">实验八 Linux操作与串口通信</a></li>
-<li><a href="#%E5%AE%9E%E9%AA%8C%E4%B9%9D-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%A3%81%E5%89%AA%E4%B8%8E%E7%A7%BB%E6%A4%8D">实验九 操作系统裁剪与移植</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E5%85%AB-linux%E6%93%8D%E4%BD%9C%E4%B8%8E%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1">实验八 Linux操作与串口通信</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9B%AE%E6%A0%87-6">基本目标</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E4%B9%9D-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%A3%81%E5%89%AA%E4%B8%8E%E7%A7%BB%E6%A4%8D">实验九 操作系统裁剪与移植</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9B%AE%E6%A0%87-7">基本目标</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E6%95%88%E6%9E%9C-7">实验效果</a></li>
+</ul>
+</li>
 <li><a href="#%E5%AE%9E%E9%AA%8C%E5%8D%81-%E5%B5%8C%E5%85%A5%E5%BC%8Flinux%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91">实验十 嵌入式Linux应用程序开发</a></li>
 </ul>
 </li>
