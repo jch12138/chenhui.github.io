@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>[嵌入式系统]mini2440课程实验 | 博德工作室</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587701770456">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587706087976">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="[嵌入式系统]mini2440课程实验 | 博德工作室 - Atom Feed" href="https://baldstudio.cn/atom.xml">
@@ -25,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://baldstudio.cn">
-  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587701770456" alt="">
+  <img class="avatar" src="https://baldstudio.cn/images/avatar.png?v=1587706087976" alt="">
   </a>
   <h1 class="site-title">
     博德工作室
@@ -706,15 +706,36 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <img src="https://baldstudio.cn/post-images/1587696192061.png" alt="" loading="lazy"><br>
 <img src="https://baldstudio.cn/post-images/1587696200076.png" alt="" loading="lazy"><br>
 <strong>2、下载内核镜像到开发板</strong><br>
-<img src="https://baldstudio.cn/post-images/1587696274281.png" alt="" loading="lazy"><br>
-###思考题<br>
-<strong>如何在内核配置项中增加一个选项?</strong><br>
+<img src="https://baldstudio.cn/post-images/1587696274281.png" alt="" loading="lazy"></p>
+<h3 id="思考题-7">思考题</h3>
+<p><strong>如何在内核配置项中增加一个选项?</strong><br>
 在KConfig中添加菜单项,保存之后再进入menuconfig即可看到新增加的选项.</p>
 <h3 id="实验效果-7">实验效果</h3>
 <p><img src="https://baldstudio.cn/post-images/1587696562337.jpg" alt="正常进入系统" loading="lazy"><br>
 <img src="https://baldstudio.cn/post-images/1587696597292.png" alt="内核启动" loading="lazy"><br>
 <img src="https://baldstudio.cn/post-images/1587696630159.png" alt="" loading="lazy"></p>
 <h2 id="实验十-嵌入式linux应用程序开发">实验十 嵌入式Linux应用程序开发</h2>
+<h3 id="基本目标-8">基本目标</h3>
+<p><strong>挂载NFS文件系统</strong><br>
+一些需要注意的问题:</p>
+<ol>
+<li>在设置linux_cmd_line时一定要注意空格,我因为在nfs根目录的地方多加了一个空格导致一直挂载不上</li>
+<li>ip地址要按照实际填写,不能照搬手册.</li>
+<li>解压根文件系统时必须在命令行里加上sudo解压,否贼会导致无法创建/dev下的某些节点,导致系统无法正常启动.如图所示<br>
+<img src="https://baldstudio.cn/post-images/1587705194497.png" alt="" loading="lazy"><br>
+正常启动后的效果<br>
+<img src="https://baldstudio.cn/post-images/1587705517091.png" alt="" loading="lazy"><br>
+<strong>交叉编译</strong><br>
+在PC机上编译后复制到nfs目录下<br>
+<img src="https://baldstudio.cn/post-images/1587705633480.png" alt="" loading="lazy"><br>
+在开发板上实时更新<br>
+<img src="https://baldstudio.cn/post-images/1587705704427.png" alt="" loading="lazy"><br>
+在开发板上运行<br>
+<img src="https://baldstudio.cn/post-images/1587705717696.png" alt="" loading="lazy"></li>
+</ol>
+<h3 id="思考题-8">思考题</h3>
+<p><strong>如何编写应用程序操作板载 LED 设备？</strong><br>
+通过对/dev目录下的led设备文件进行读写,可以控制led设备.</p>
 
               </div>
               <div class="toc-container">
@@ -772,10 +793,16 @@ Frame Rate = 1/{(VSPW+1)+(VBPD+1)+(LINEVAL+1)+(VFPD+!)}x{(HSPW+!)+(HBPD+1)+(HFPD
 <li><a href="#%E5%AE%9E%E9%AA%8C%E4%B9%9D-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%A3%81%E5%89%AA%E4%B8%8E%E7%A7%BB%E6%A4%8D">实验九 操作系统裁剪与移植</a>
 <ul>
 <li><a href="#%E5%9F%BA%E6%9C%AC%E7%9B%AE%E6%A0%87-7">基本目标</a></li>
+<li><a href="#%E6%80%9D%E8%80%83%E9%A2%98-7">思考题</a></li>
 <li><a href="#%E5%AE%9E%E9%AA%8C%E6%95%88%E6%9E%9C-7">实验效果</a></li>
 </ul>
 </li>
-<li><a href="#%E5%AE%9E%E9%AA%8C%E5%8D%81-%E5%B5%8C%E5%85%A5%E5%BC%8Flinux%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91">实验十 嵌入式Linux应用程序开发</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E5%8D%81-%E5%B5%8C%E5%85%A5%E5%BC%8Flinux%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91">实验十 嵌入式Linux应用程序开发</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9B%AE%E6%A0%87-8">基本目标</a></li>
+<li><a href="#%E6%80%9D%E8%80%83%E9%A2%98-8">思考题</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
