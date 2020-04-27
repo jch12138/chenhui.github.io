@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>学习小组</title>
-    <updated>2020-04-27T04:01:04.200Z</updated>
+    <updated>2020-04-27T07:40:59.518Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -10,6 +10,126 @@
     <logo>https://baldstudio.cn/images/avatar.png</logo>
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 学习小组</rights>
+    <entry>
+        <title type="html"><![CDATA[[RECA学习营]第二周]]></title>
+        <id>https://baldstudio.cn/post/okV-BAOdg/</id>
+        <link href="https://baldstudio.cn/post/okV-BAOdg/">
+        </link>
+        <updated>2020-04-27T06:25:01.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>作者: 蒋晨辉</strong></p>
+<h3 id="需要掌握的内容">需要掌握的内容：</h3>
+<p>本周主要学习RT-Thread env工具以及基础外设的使用、finsh组件</p>
+<ul>
+<li>1、env的使用
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/programming-manual/env/env/">env用户手册</a>、<a href="https://www.rt-thread.org/document/site/programming-manual/kconfig/kconfig/">Kconfig</a></li>
+<li>学习视频：<a href="https://www.rt-thread.org/document/site/tutorial/env-video/">env视频教程</a></li>
+</ul>
+</li>
+<li>2、finsh的使用
+<ul>
+<li>学习文档：<a href="https://www.rt-thread.org/document/site/programming-manual/finsh/finsh/">FinSH</a></li>
+<li>学习视频：查看群里分享的资料，第二期视频
+<ul>
+<li>《3.Finsh组件》，了解下finsh组件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>3、常用设备与驱动
+<ul>
+<li>学习文档
+<ul>
+<li><a href="https://www.rt-thread.org/document/site/programming-manual/device/device/">IO设备模型</a></li>
+<li><a href="https://www.rt-thread.org/document/site/programming-manual/device/pin/pin/">PIN</a></li>
+<li><a href="https://www.rt-thread.org/document/site/programming-manual/device/uart/uart/">UART</a></li>
+<li><a href="https://www.rt-thread.org/document/site/programming-manual/device/i2c/i2c/">IIC</a></li>
+<li><a href="https://www.rt-thread.org/document/site/programming-manual/device/spi/spi/">SPI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="目标">目标</h3>
+<p>在<strong>掌握以上内容之后</strong>，我们在此基础上<strong>还</strong>需要完成以下几个目标：</p>
+<p>目标1：了解PIN设备的使用步骤，能在自己开发板上使用RTT PIN设备驱动按键。<br>
+使用PIN设备的一般步骤为</p>
+<ol>
+<li>获取PIN设备<br>
+如果使用STM32的BSP,可以用<code>GET_PIN(port, pin)</code></li>
+<li>设置PIN设备</li>
+</ol>
+<pre><code class="language-c">void rt_pin_mode(rt_base_t pin, rt_base_t mode);
+</code></pre>
+<ol start="3">
+<li>读取/设置输入/输出电平</li>
+</ol>
+<pre><code class="language-c">int rt_pin_read(rt_base_t pin);
+void rt_pin_write(rt_base_t pin, rt_base_t value);
+</code></pre>
+<p>在自己板上使用RTT PIN的设备驱动按键示例</p>
+<pre><code class="language-c">#define KEY0_PIN GET_PIN(F,13)
+
+int main(void)
+{
+    rt_pin_mode(KEY0_PIN, PIN_MODE_INPUT);
+    while(1)
+    {
+        if(rt_pin_read(KEY0_PIN)==PIN_LOW)
+        {
+            rt_kprintf(&quot;按键按下!&quot;);
+        }
+        rt_thread_mdelay(100);
+    }
+}
+
+</code></pre>
+<p>目标2：了解I2C设备的使用步骤，能通过RTT I2C设备读取到板载I2C硬件从设备的地址。<br>
+使用I2C设备的一般步骤为</p>
+<ol>
+<li>获取I2C设备</li>
+</ol>
+<pre><code class="language-c">rt_device_t rt_device_find(const char* name);
+</code></pre>
+<ol start="2">
+<li>传输数据</li>
+</ol>
+<pre><code class="language-c">rt_size_t rt_i2c_transfer(struct rt_i2c_bus_device *bus,
+                          struct rt_i2c_msg         msgs[],
+                          rt_uint32_t               num);
+</code></pre>
+<p>如果不知道从机地址,只能向总线依次发送地址,直到从机响应为止.<br>
+目标3：了解SPI设备的实验步骤，知道CS引脚如何设置。<br>
+使用SPI设备的一般操作为</p>
+<ol>
+<li>挂载SPI设备</li>
+</ol>
+<pre><code class="language-c">rt_err_t rt_hw_spi_device_attach(const char *bus_name, const char *device_name, GPIO_TypeDef* cs_gpiox, uint16_t cs_gpio_pin);
+</code></pre>
+<ol start="2">
+<li>配置SPI设备</li>
+</ol>
+<pre><code class="language-c">rt_err_t rt_spi_configure(struct rt_spi_device *device,struct rt_spi_configuration *cfg)
+</code></pre>
+<ol>
+<li>访问SPI设备<br>
+<img src="https://baldstudio.cn/post-images/1587971222345.png" alt="" loading="lazy"></li>
+</ol>
+<p>设置CS引脚是在挂载SPI设备的时候指定的.</p>
+<h3 id="作业">作业</h3>
+<p>作业1【学习营实战——2】：根据群里分享的视频《4.常用的外设驱动添加》以及源码目录下的文档 <a href="https://github.com/RT-Thread/rt-thread/blob/master/bsp/stm32/docs/STM32%E7%B3%BB%E5%88%97%E5%A4%96%E8%AE%BE%E9%A9%B1%E5%8A%A8%E6%B7%BB%E5%8A%A0%E6%8C%87%E5%8D%97.md">rt-thread/bsp/stm32/docs/STM32系列外设驱动添加指南.md</a>，让自己的开发板某个指定的串口能打印rt-thread 的 log，输入help回车可以出现系统命令。<br>
+添加指定串口,并将FinSH输出重定向到新的串口的步骤是:</p>
+<ol>
+<li>在CubeMX中打开串口外设,生成代码.</li>
+<li>在board文件夹中的kconfig文件中添加开启相应串口的菜单项.</li>
+<li>在menuconfig中将console的设备名称改为新的串口设备名称.<br>
+作业2：总结PWM设备的一般使用步骤。<br>
+使用PWM设备时,要在CubeMX中使能 internal Clock 时钟，然后为 channelx 选项选择PWM Generation CHx,然后修改Kconfig,添加菜单项,然后在config文件中添加相应的定义.</li>
+</ol>
+<h3 id="总结">总结</h3>
+<p>本周学会了env的使用，IO框架以及几个基础外设的使用，会为finsh配置指定串口。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[RT-Thread学习笔记（二）内核对象]]></title>
         <id>https://baldstudio.cn/post/rt-thread-xue-xi-bi-ji-er-nei-he-dui-xiang/</id>
