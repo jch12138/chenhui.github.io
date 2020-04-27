@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>[嵌入式系统]mini2440课程实验 | 学习小组</title>
-<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587779445053">
+<link rel="shortcut icon" href="https://baldstudio.cn/favicon.ico?v=1587960059711">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://baldstudio.cn/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -219,19 +219,30 @@ static void __irq key_handler(void)
 理论上说,改为上升沿触发,当松开按键时才会触发中断,使LED灯开始闪烁.然而我实际测试的时候,总是在按下按键的时候就触发了.通过在中断函数中打印日志发现,按键抖动非常严重,按下一次按键能触发三四次中断.所以实际效果并不好.</p>
 <pre><code class="language-c">/* 上升沿触发 */
     /* 实际效果不理想,在中断函数打印日志,发现按下一次按钮
-    可以触发三四次中断,抖动太严重,顾不追求实际效果 */
+    可以触发三四次中断,抖动太严重,也许是因为我手上这块板太老了,按键老化,顾不追求实际效果 */
     rEXTINT1 &amp;= ~(7 &lt;&lt; 0); /* 清空 */
-    rEXTINT1 |= (4 &lt;&lt; 0);  //set eint8 rasing edge int
+    rEXTINT1 |= (4 &lt;&lt; 0);  	//set eint8 rasing edge int
+	rEXTINT1 |= (1&lt;&lt;3);    	//ser eint8 interrupt filter
+
     rEXTINT1 &amp;= ~(7 &lt;&lt; 12);
-    rEXTINT1 |= (4 &lt;&lt; 12); //set eint11 rasing edge int
+    rEXTINT1 |= (4 &lt;&lt; 12); 	//set eint11 rasing edge int
+	rEXTINT1 |= (1&lt;&lt;15);		//ser eint11 interrupt filter
+
     rEXTINT1 &amp;= ~(7 &lt;&lt; 20);
-    rEXTINT1 |= (4 &lt;&lt; 20); //set eint13 rasing edge int
+    rEXTINT1 |= (4 &lt;&lt; 20); 	//set eint13 rasing edge int
+	rEXTINT1 |= (1&lt;&lt;23);		//ser eint13 interrupt filter
+
     rEXTINT1 &amp;= ~(7 &lt;&lt; 24);
-    rEXTINT1 |= (4 &lt;&lt; 24); //set eint14 rasing edge int
+    rEXTINT1 |= (4 &lt;&lt; 24);	//set eint14 rasing edge int
+	rEXTINT1 |= (1&lt;&lt;27);		//ser eint14 interrupt filter
+
     rEXTINT1 &amp;= ~(7 &lt;&lt; 28);
-    rEXTINT1 |= (4 &lt;&lt; 28); //set eint15 rasing edge int
+    rEXTINT1 |= (4 &lt;&lt; 28); 	//set eint15 rasing edge int
+	rEXTINT1 |= (1&lt;&lt;31);		//ser eint15 interrupt filter
+
     rEXTINT2 &amp;= ~(0xf &lt;&lt; 12);
-    rEXTINT2 |= (4 &lt;&lt; 12); //set eint19 rasing edge int
+    rEXTINT2 |= (4 &lt;&lt; 12); 	//set eint19 rasing edge int
+	rEXTINT2 |= (1&lt;&lt;15);		//ser eint19 interrupt filter
 </code></pre>
 <p><strong>2.如何实现不同按键中断有不同处理?</strong><br>
 通过读取rEINTPEND中的值,可以判断是哪一个中断被触发,可以由此写出如下中断服务函数,实现按下KEY1,KEY2,KEY3 慢速闪烁,按下KEY4,KEY5,KEY6快速闪烁 .</p>
