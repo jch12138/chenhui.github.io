@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>学习小组</title>
-    <updated>2020-05-01T07:50:15.732Z</updated>
+    <updated>2020-05-01T07:57:34.706Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -135,7 +135,7 @@ sensor框架是RT-Thread为了适配众多传感器而推出的框架,对上层�
 </code></pre>
 <h3 id="作业">作业</h3>
 <p>作业1【学习营实战——3】：根据群里分享的视频《5.传感器框架对接》，使用env将ds18b20软件包加入自己的工程中，能在自己的开发板上使用dsl8b20软件包获取温度数据。<br>
-在env中执行menuconfig,选中dsl8b20软件包之后,保存退出,执行pkgs --update.将软件包下载到本地.然后执行scons --target=mdk5更新工程目录.之后编译运行即可.</p>
+在env中执行menuconfig,选中dsl8b20软件包和启用sensor设备驱动之后,保存退出,执行pkgs --update.将软件包下载到本地.然后执行scons --target=mdk5更新工程目录.之后编译运行即可.</p>
 <p><strong>运行效果</strong><br>
 <img src="https://baldstudio.cn/post-images/1588317341792.png" alt="" loading="lazy"></p>
 <p>作业2：如果没有现成的dsl8b20软件包，你自己如何将ds18b20对接到sensor框架呢？试试看！<br>
