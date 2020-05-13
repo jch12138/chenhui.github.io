@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://baldstudio.cn</id>
     <title>学习小组</title>
-    <updated>2020-05-01T07:57:34.706Z</updated>
+    <updated>2020-05-13T11:32:27.761Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://baldstudio.cn"/>
     <link rel="self" href="https://baldstudio.cn/atom.xml"/>
@@ -10,6 +10,61 @@
     <logo>https://baldstudio.cn/images/avatar.png</logo>
     <icon>https://baldstudio.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 学习小组</rights>
+    <entry>
+        <title type="html"><![CDATA[[RECA学习营]第四周]]></title>
+        <id>https://baldstudio.cn/post/k0cVuzC3A/</id>
+        <link href="https://baldstudio.cn/post/k0cVuzC3A/">
+        </link>
+        <updated>2020-05-13T11:31:44.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>作者:蒋晨辉</strong></p>
+<h3 id="目标">目标</h3>
+<p>本周属于了解内容，内容较少，主要是为了完成：esp8266联网，并将温度数据上传至onenet，这也将完成本次的实战内容，锻炼动手能力。</p>
+<p>学习视频：群里分享的《6.软件包使用讲解》。</p>
+<p>参考文章：<a href="https://www.rt-thread.org/document/site/submodules/onenet/docs/introduction/">onenet介绍</a></p>
+<p>参考代码：<a href="https://github.com/willianchanlovegithub/RCEA-DEMO-2020.06/tree/master/demo_project/applications">点击获取应用层示例代码</a></p>
+<p>本次实战的完整工程可以参考：<a href="https://github.com/willianchanlovegithub/RCEA-DEMO-2020.06">RCEA-DEMO-2020.06</a></p>
+<h3 id="作业">作业</h3>
+<p>作业【学习营实战——4】：使用env配置onenet软件包并下载至工程中，并使得esp8266联网，并将温度数据上传至onenet，最终可以在onenet平台上看到数据情况。（完成此次作业，也将完成此次学习营实战部分的内容）。</p>
+<ul>
+<li>
+<p>使用env配置ESP8266</p>
+<ol>
+<li>
+<p>开启 Env 工具，进入<code>rt-thread\bsp\stm32\stm32f407-atk-explorer</code> 目录，在 Env 命令行输入 menuconfig 进入配置界面配置工程。</p>
+</li>
+<li>
+<p>开启 AT Device 软件包，示例中使用 <code>laster</code> 最新版本，需要配置使用的 AT 模块型号（ESP8266）和 AT Client 设备名称（UART3）：</p>
+</li>
+<li>
+<p><code>RT-Thread online packages ---&gt; IoT - internet of things ---&gt; AT Device</code>配置开启 AT DEVICE 软件包支持；</p>
+</li>
+<li>
+<p>配置使用的设备为 ESP8266 设备；</p>
+</li>
+<li>
+<p>配置 AT Client 设备名称和最大支持的接收数据长度；</p>
+</li>
+<li>
+<p>配置 wifi ssid 和 wifi password 用于设备联网；</p>
+</li>
+<li>
+<p>配置使用 <code>laster</code> 版本软件包；</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/13/pLgkGBvb37Eaoyz.png" alt="image-20200513192829564" loading="lazy"></figure>
+</li>
+<li>
+<p>配置onenet</p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2020/05/13/b1ydBhZnxY7OHe2.png" alt="image-20200513193013787" loading="lazy"></figure>
+</li>
+<li>
+<p>使用示例程序进行数据上报</p>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2020/05/13/XRUbT3mVgjFAPi2.png" alt="image-20200513193026216" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2020/05/13/ASeXFxtfdJLpT7r.png" alt="image-20200513193043660" loading="lazy"></figure>
+</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[[RECA学习营]第三周]]></title>
         <id>https://baldstudio.cn/post/dRXqKJ1gm/</id>
